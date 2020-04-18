@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Form } from 'react-bootstrap';
 
-function Question(props) {
+const Question = (props) => {
   return (
     <div>
       <Row className="justify-content-md-center">

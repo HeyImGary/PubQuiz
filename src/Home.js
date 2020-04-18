@@ -1,10 +1,11 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import Aux from '../src/hoc/Aux'
 
-function Home() {
+const home = () => {
   return (
-    <div>
+    <Aux>
       <Row className="MainRow ">
         <Col>
           <h1>Pub Quiz Time</h1>
@@ -23,8 +24,8 @@ function Home() {
           </Link>
         </Col>
       </Row>
-    </div>
+    </Aux>
   );
 }
 
-export default Home;
+export default home;

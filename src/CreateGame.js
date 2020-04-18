@@ -1,9 +1,8 @@
 import React from 'react';
 import { Row, Col } from 'react-bootstrap';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-function CreateGame() {
-  let { url } = useRouteMatch();
+const createGame = () => {
   return (
     <div>
       <Row>
@@ -21,7 +20,7 @@ function CreateGame() {
         </Col>
 
         <Col xs={12} md={{ span: 3, offset: 2 }} className="Card">
-          <Link to={`${url}/form`}>
+          <Link to={`create/form`}>
             <h2>Private Game</h2>
           </Link>
         </Col>
@@ -30,4 +29,4 @@ function CreateGame() {
   );
 }
 
-export default CreateGame;
+export default createGame;

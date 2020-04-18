@@ -12,7 +12,6 @@ import { Container } from 'react-bootstrap';
 class App extends Component {
   render() {
     return (
-      <div className="App justify-content-md-center">
         <Container className="justify-content-md-center MainContainer">
           <Router>
             <Switch>
@@ -34,7 +33,6 @@ class App extends Component {
             </Switch>
           </Router>
         </Container>
-      </div>
     );
   }
 }

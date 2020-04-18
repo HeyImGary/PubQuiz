@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, FormControl } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-function JoinRoom() {
+const joinRoom = () => {
   return (
     <div>
       <Row>
@@ -38,4 +38,4 @@ function JoinRoom() {
   );
 }
 
-export default JoinRoom;
+export default joinRoom;
