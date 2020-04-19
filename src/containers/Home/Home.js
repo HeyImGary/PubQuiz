@@ -1,35 +1,34 @@
 import React, { Component } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css';
-import Home from './Home';
-import JoinRoom from './JoinRoom';
-import CreateGame from './CreateGame';
-import CreateForm from './CreateForm';
+
+import HomeScreen from '../../component/HomeScreen/HomeScreen';
+import JoinGame from '../JoinGame/JoinGame';
+import CreateGame from '../CreateGame/CreateGame';
+
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import { Container } from 'react-bootstrap';
 
-class App extends Component {
+import styles from './Home.module.css'
+
+class Home extends Component {
   render() {
     return (
-        <Container className="justify-content-md-center MainContainer">
+        <Container className={styles.CenterContent}>
           <Router>
             <Switch>
               <Route exact path="/">
-                <Home />
+                <HomeScreen />
               </Route>
 
               <Route exact path="/play">
-                <JoinRoom />
+                <JoinGame />
               </Route>
 
               <Route exact path="/create">
                 <CreateGame />
               </Route>
 
-              <Route exact path="/create/form">
-                <CreateForm />
-              </Route>
             </Switch>
           </Router>
         </Container>
@@ -37,4 +36,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default Home;

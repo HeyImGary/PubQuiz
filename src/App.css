@@ -10,10 +10,6 @@ body,
   height: 100%;
 }
 
-.MainRow {
-  padding-top: 30%;
-}
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;

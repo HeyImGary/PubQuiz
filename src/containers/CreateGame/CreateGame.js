@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { Row, Col, Button, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import axios from './axios-add-questions';
+import axios from '../../axios-add-questions';
 
-import Question from './Question';
+import CreateQuestion from '../../component/CreateQuestion/CreateQuestion';
+import MultiAnswer from '../../component/MultiAnswer/MultiAnswer';
 
-class CreateForm extends Component {
+class CreateGame extends Component {
   state = {
     emptyState: {
       question: '',
@@ -53,7 +54,7 @@ class CreateForm extends Component {
     currentState[name] = value;
 
     this.setState({
-      emptyState: currentState,
+      emptyState: currentState
     });
   };
 
@@ -120,6 +121,7 @@ class CreateForm extends Component {
   };
 
   render() {
+    console.log("hi")
     return (
       <div>
         <Row>
@@ -152,54 +154,7 @@ class CreateForm extends Component {
                         </Col>
                       </Row>
 
-                      <Row>
-                        <Col xs={12} md={6}>
-                          <Form.Group controlId="answerOne">
-                            <Form.Control
-                              type="text"
-                              placeholder="Answer 1"
-                              name="answerOne"
-                              value={q.answerOne}
-                              onChange={(e) => this.editChange(e, q.id)}
-                            />
-                          </Form.Group>
-                        </Col>
-                        <Col xs={12} md={6}>
-                          <Form.Group controlId="answerTwo">
-                            <Form.Control
-                              type="text"
-                              placeholder="Answer 2"
-                              name="answerTwo"
-                              value={q.answerTwo}
-                              onChange={(e) => this.editChange(e, q.id)}
-                            />
-                          </Form.Group>
-                        </Col>
-                      </Row>
-                      <Row>
-                        <Col xs={12} md={6}>
-                          <Form.Group controlId="answerThree">
-                            <Form.Control
-                              type="text"
-                              placeholder="Answer 3"
-                              name="answerThree"
-                              value={q.answerThree}
-                              onChange={(e) => this.editChange(e, q.id)}
-                            />
-                          </Form.Group>
-                        </Col>
-                        <Col xs={12} md={6}>
-                          <Form.Group controlId="answerFour">
-                            <Form.Control
-                              type="text"
-                              placeholder="Answer 4"
-                              name="answerFour"
-                              value={q.answerFour}
-                              onChange={(e) => this.editChange(e, q.id)}
-                            />
-                          </Form.Group>
-                        </Col>
-                      </Row>
+                      <MultiAnswer values={q} change={(e) => this.editChange(e, q.id)}/>              
 
                       <Row>
                         <Col xs={12} md={12}>
@@ -217,7 +172,7 @@ class CreateForm extends Component {
                 ) : (
                   <Col xs={12} md={6}>
                     <Row>
-                      <Col>{q.question}</Col>
+                      <Col>Questions {index}: {q.question}</Col>
                     </Row>
 
                     <Row>
@@ -272,10 +227,10 @@ class CreateForm extends Component {
               <h1>Press the '+' button to add a new question</h1>
             ) : null}
 
-            <Question
+            <CreateQuestion
               click={this.AddQuestion}
               change={this.change}
-              submit={this.onSubmit}
+              
               values={this.state.emptyState}
             />
           </Col>
@@ -296,4 +251,4 @@ class CreateForm extends Component {
   }
 }
 
-export default CreateForm;
+export default CreateGame;
