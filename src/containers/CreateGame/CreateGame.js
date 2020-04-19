@@ -99,7 +99,7 @@ class CreateGame extends Component {
 
     axios
       .post('/questions.json', post)
-      .then((responce) => console.log(responce))
+      .then((responce) => alert(responce.data.name))
       .catch((error) => console.log(error));
   };
 

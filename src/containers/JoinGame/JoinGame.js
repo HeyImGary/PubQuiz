@@ -7,6 +7,7 @@ import Spinner from '../../component/UI/Spinner/Spinner'
 import Answers from '../../component/Answers/Answers'
 
 import axios from '../../axios-add-questions'
+import styles from './JoinGame.module.css'
 
 class JoinGame extends Component {
   state = {
@@ -26,8 +27,8 @@ class JoinGame extends Component {
 
   joinHandler = () => {
     this.setState({isFetching: true})
-    console.log(this.state.roomId)
-    axios.get('questions/-M5EYFt9o8ZAxwhJk8Xg.json')
+    console.log("hi", this.state.roomdId)
+    axios.get('questions/'+this.state.roomId+'.json')
       .then((responce) => {
         
         this.setState({
@@ -73,25 +74,23 @@ class JoinGame extends Component {
       
       !joined ? (
       <Aux>
-        <Row className="MainRow justify-content-md-center">
+        <Row className={[styles.CenterContent, styles.MainRow]}>
           <Col xs={12} md={12}>
-            <h1>Enter Room ID</h1>
+            <h1>Enter Room ID {this.state.roomId}</h1>
           </Col>
         </Row>
-        <Row className="justify-content-md-center">
+        <Row className={styles.CenterContent}>
           <Col xs={12} md={3}>
-            <Form>
-              <FormControl
+              <Form.Control
                 type="text"
                 placeholder="RoomId"
                 name="roomId"
-                onChange={this.roomIdHandler}
-              />
-            </Form>
+                onChange={e => this.roomIdHandler(e)}
+                />
           </Col>
         </Row>
         
-        <Row className="justify-content-md-center">
+        <Row className={styles.CenterContent}>
           <Col xs={12} md={3}>
             
             <Button variant="success" onClick={this.joinHandler}> Join </Button>
@@ -99,12 +98,12 @@ class JoinGame extends Component {
         </Row>
       </Aux>):(
       <Aux>
-        <Row className="justify-content-md-center">
+        <Row className={styles.CenterContent}>
 
             {questions}
 
         </Row>
-        <Row className="justify-content-md-center">
+        <Row className={styles.CenterContent}>
           <Col xs={12} md={3}>
             
             
