@@ -1,8 +1,16 @@
-.CenterContent{
-    justify-content: center;
-    text-align: center;
+.CenterContent {
+  justify-content: center;
+  text-align: center;
+  align-items: center;
 }
 
 .MainRow {
-    padding-top: 30%;
-  }
+  padding-top: 30%;
+}
+
+.BackBar {
+  justify-content: left;
+  text-align: left;
+  align-items: left;
+  position: absolute;
+}

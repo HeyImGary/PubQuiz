@@ -2,10 +2,10 @@ import React from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-import styles from './HomeScreen.module.css'
+import styles from './HomeScreen.module.css';
 
-import NavButton from '../UI/NavButton/NavButton'
-import Aux from '../../hoc/Aux'
+import NavButton from '../UI/NavButton/NavButton';
+import Aux from '../../hoc/Aux';
 
 const homeScreen = () => {
   return (
@@ -30,6 +30,6 @@ const homeScreen = () => {
       </Row>
     </Aux>
   );
-}
+};
 
 export default homeScreen;
