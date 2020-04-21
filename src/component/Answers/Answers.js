@@ -10,11 +10,6 @@ import Aux from '../../hoc/Aux';
 
 const answers = (props) => (
   <Aux>
-    <Col xs={12} md={{ span: 2, offset: 2 }} className="Card">
-      <Link to="/">
-        <h4>Back</h4>
-      </Link>
-    </Col>
     <Row className={[styles.CenterContent, styles.MainRow]}>
       <Col xs={12} md={12}>
         <h1>{props.values.question}</h1>

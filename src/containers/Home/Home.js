@@ -4,6 +4,8 @@ import HomeScreen from '../../component/HomeScreen/HomeScreen';
 import JoinGame from '../JoinGame/JoinGame';
 import CreateGame from '../CreateGame/CreateGame';
 
+import test from './test';
+
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import { Container } from 'react-bootstrap';
@@ -16,17 +18,13 @@ class Home extends Component {
       <Container className={styles.CenterContent}>
         <Router>
           <Switch>
-            <Route exact path="/">
-              <HomeScreen />
-            </Route>
+            <Route exact path="/" component={HomeScreen} />
 
-            <Route exact path="/play">
-              <JoinGame />
-            </Route>
+            <Route exact path="/play" component={JoinGame} />
 
-            <Route exact path="/create">
-              <CreateGame />
-            </Route>
+            <Route exact path="/create" component={CreateGame} />
+
+            <Route exact path="/test" component={test} />
           </Switch>
         </Router>
       </Container>

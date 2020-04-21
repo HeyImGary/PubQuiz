@@ -7,3 +7,10 @@
 .MainRow {
   padding-top: 30%;
 }
+
+.BackBar {
+  justify-content: left;
+  text-align: left;
+  align-items: left;
+  position: absolute;
+}

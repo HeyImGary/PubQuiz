@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import { Row, Col, FormControl, Button, Form } from 'react-bootstrap';
 
-import Aux from '../../hoc/Aux';
+import { Link } from 'react-router-dom';
+import styles from './JoinGame.module.css';
+
 import Spinner from '../../component/UI/Spinner/Spinner';
 
 import Answers from '../../component/Answers/Answers';
 import Join from './join';
+import Aux from '../../hoc/Aux';
 
 import axios from '../../axios-add-questions';
-import styles from './JoinGame.module.css';
+import { Col } from 'react-bootstrap';
 
 class JoinGame extends Component {
   state = {
-    roodId: ' ',
     questions: [],
     questionNumber: 0,
     isFetching: false,
@@ -24,11 +25,10 @@ class JoinGame extends Component {
     });
   };
 
-  joinHandler = () => {
+  joinHandler = (id) => {
     this.setState({ isFetching: true });
-    console.log('hi', this.state.roomdId);
     axios
-      .get('questions/' + this.state.roomId + '.json')
+      .get('questions/' + id + '.json')
       .then((responce) => {
         this.setState({
           questions: responce.data.questions,
@@ -50,7 +50,10 @@ class JoinGame extends Component {
 
   render() {
     let questions = (
-      <Join joinHandler={this.joinHandler} roomIdHandler={this.roomIdHandler} />
+      <Join
+        joinHandler={(id) => this.joinHandler(id)}
+        roomIdHandler={this.roomIdHandler}
+      />
     );
     let joined = false;
     if (this.state.questions.length !== 0) {
@@ -68,7 +71,19 @@ class JoinGame extends Component {
       questions = <Spinner />;
     }
 
-    return [questions];
+    return (
+      <Aux>
+        {this.state.isFetching ? null : (
+          <Col xs={12} md={{ span: 2, offset: 2 }} className={styles.BackBar}>
+            <Link to="/">
+              <h4>Back</h4>
+            </Link>
+          </Col>
+        )}
+
+        {[questions]}
+      </Aux>
+    );
   }
 }
 
