@@ -23,11 +23,11 @@ class CreateGame extends Component {
   //   this.setState({ questions: questions });
   // };
 
-  AddQuestion = (i) => {
-    console.log(i);
-    const questions = [...this.state.questions, i];
+  AddQuestion = (newQuestion) => {
+    console.log(newQuestion);
+    const newQuestionState = [...this.state.questions, newQuestion];
     this.setState({
-      questions: questions,
+      questions: newQuestionState,
       questionNumber: this.state.questionNumber + 1,
     });
   };
