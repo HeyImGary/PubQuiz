@@ -6,7 +6,7 @@ import CreateGame from '../CreateGame/CreateGame';
 
 import test from './test';
 
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Switch, Route } from 'react-router-dom';
 
 import { Container } from 'react-bootstrap';
 
@@ -16,17 +16,15 @@ class Home extends Component {
   render() {
     return (
       <Container className={styles.CenterContent}>
-        <Router>
-          <Switch>
-            <Route exact path="/" component={HomeScreen} />
+        <Switch>
+          <Route exact path="/" component={HomeScreen} />
 
-            <Route exact path="/play" component={JoinGame} />
+          <Route exact path="/play" component={JoinGame} />
 
-            <Route exact path="/create" component={CreateGame} />
+          <Route exact path="/create" component={CreateGame} />
 
-            <Route exact path="/test" component={test} />
-          </Switch>
-        </Router>
+          <Route exact path="/test" component={test} />
+        </Switch>
       </Container>
     );
   }

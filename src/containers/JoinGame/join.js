@@ -1,7 +1,6 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Link } from 'react-router-dom';
 
 import Aux from '../../hoc/Aux';
 import styles from './JoinGame.module.css';

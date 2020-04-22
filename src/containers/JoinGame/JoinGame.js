@@ -10,13 +10,14 @@ import Join from './join';
 import Aux from '../../hoc/Aux';
 
 import axios from '../../axios-add-questions';
-import { Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 
 class JoinGame extends Component {
   state = {
     questions: [],
     questionNumber: 0,
     isFetching: false,
+    isCorrect: null,
   };
 
   roomIdHandler = (e) => {
@@ -48,6 +49,18 @@ class JoinGame extends Component {
     }
   };
 
+  selectAnswerHandler = (answer) => {
+    console.log(answer);
+    let t =
+      this.state.questions[this.state.questionNumber].correctAnswer === answer
+        ? true
+        : false;
+    console.log(t);
+    this.setState({
+      isCorrect: t,
+    });
+  };
+
   render() {
     let questions = (
       <Join
@@ -55,19 +68,19 @@ class JoinGame extends Component {
         roomIdHandler={this.roomIdHandler}
       />
     );
-    let joined = false;
+
     if (this.state.questions.length !== 0) {
-      joined = true;
       questions = (
         <Answers
+          selectAnswer={(answer) => this.selectAnswerHandler(answer)}
           values={this.state.questions[this.state.questionNumber]}
           nextQuestionHandler={this.nextQuestionHandler}
+          isCorrect={this.state.isCorrect}
         />
       );
     }
 
     if (this.state.isFetching === true) {
-      joined = true;
       questions = <Spinner />;
     }
 
@@ -80,7 +93,7 @@ class JoinGame extends Component {
             </Link>
           </Col>
         )}
-
+        {this.state.isCorrect ? <h1>Correct!</h1> : <h1>Wrong!</h1>}
         {[questions]}
       </Aux>
     );

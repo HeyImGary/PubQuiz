@@ -1,10 +1,11 @@
 import React from 'react';
-import axios from '../../axios-add-questions';
 
 import * as Yup from 'yup';
-import { useFormik, Field } from 'formik';
+import { useFormik } from 'formik';
 
 import Aux from '../../hoc/Aux';
+
+import styles from './Home.module.css';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 
 const Test = (props) => {
@@ -18,31 +19,46 @@ const Test = (props) => {
       answerThree: '',
       answerFour: '',
     },
+    correctAnswer: 'answerOne',
   };
 
-  const validationSchema = Yup.object({
-    question: Yup.string().min(2, 'nope').required('Please enter a room id'),
-    answerOne: Yup.string().min(2, 'nope').required('Please enter a room id'),
-    answerTwo: Yup.string().min(2, 'nope').required('Please enter a room id'),
-    answerThree: Yup.string().min(2, 'nope').required('Please enter a room id'),
-    answerFour: Yup.string().min(2, 'nope').required('Please enter a room id'),
-  });
+  const validationSchema = Yup.object(
+    {
+      question: Yup.string().min(2, 'nope').required('Please enter a room id'),
+    },
+    props.isMilti
+      ? {
+          answerOne: Yup.string()
+            .min(2, 'nope')
+            .required('Please enter a room id'),
+          answerTwo: Yup.string()
+            .min(2, 'nope')
+            .required('Please enter a room id'),
+          answerThree: Yup.string()
+            .min(2, 'nope')
+            .required('Please enter a room id'),
+          answerFour: Yup.string()
+            .min(2, 'nope')
+            .required('Please enter a room id'),
+        }
+      : null
+  );
 
   const formik = useFormik({
-    initialValues: { initialValues },
-    isInitialValid: validationSchema.isValidSync(initialValues),
+    initialValues: { ...initialValues },
     validationSchema: validationSchema,
+    initialErrors: validationSchema.isValidSync({ ...initialValues }),
 
     onSubmit: (values) => {
-      let answers = {
-        answerOne: values.answerOne,
-        answerTwo: values.answerTwo,
-        answerThree: values.answerThree,
-        answerFour: values.answerFour,
-      };
       question = [
         ...question,
-        { question: values.question, answers: { ...answers } },
+        {
+          question: values.question,
+          answers: props.isMulti ? { ...values.answers } : null,
+          id: props.questionNumber,
+          isMulti: props.isMulti,
+          correctAnswer: values.correctAnswer,
+        },
       ];
 
       props.addQuestionHandler({ ...question[0] });
@@ -52,78 +68,93 @@ const Test = (props) => {
     },
   });
 
-  const isMultiQuestion = true;
   return (
-    <Aux>
-      <Form onSubmit={formik.handleSubmit}>
-        {JSON.stringify(formik, null, 2)}
-        <Row>
-          <Col>
-            <Form.Control
-              as="textarea"
-              rows="3"
-              placeholder="Question"
-              name="question"
-              value={formik.values.question || ''}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-            />
-          </Col>
-        </Row>
-        {isMultiQuestion ? (
-          <Aux>
-            <Row>
-              <Col xs={12} md={6}>
-                <Form.Control
-                  type="text"
-                  placeholder="Answer 1"
-                  name="answerOne"
-                  value={formik.values.answerOne || ''}
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                />
-              </Col>
+    <Form onSubmit={formik.handleSubmit} className={styles.CenterContent}>
+      <Row>
+        <Col xs={12} md={12}>
+          <Form.Control
+            as="textarea"
+            rows="3"
+            placeholder="Question"
+            name="question"
+            value={formik.values.question}
+            onBlur={formik.handleBlur}
+            onChange={formik.handleChange}
+          />
+        </Col>
+      </Row>
+      {props.isMulti ? (
+        <Aux>
+          <Row className={styles.Padding}>
+            <Col xs={12} md={6}>
+              <Form.Control
+                type="text"
+                placeholder="Answer 1"
+                name="answers.answerOne"
+                value={formik.values.answers.answerOne}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+              />
+            </Col>
 
-              <Col xs={12} md={6}>
-                <Form.Control
-                  type="text"
-                  placeholder="Answer 2"
-                  name="answerTwo"
-                  value={formik.values.answerTwo || ''}
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                />
-              </Col>
-            </Row>
+            <Col xs={12} md={6}>
+              <Form.Control
+                type="text"
+                placeholder="Answer 2"
+                name="answers.answerTwo"
+                value={formik.values.answers.answerTwo}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+              />
+            </Col>
+          </Row>
 
-            <Row>
-              <Col xs={12} md={6}>
-                <Form.Control
-                  type="text"
-                  placeholder="Answer 3"
-                  name="answerThree"
-                  value={formik.values.answerThree || ''}
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                />
-              </Col>
+          <Row className={styles.Padding}>
+            <Col xs={12} md={6}>
+              <Form.Control
+                type="text"
+                placeholder="Answer 3"
+                name="answers.answerThree"
+                value={formik.values.answers.answerThree}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+              />
+            </Col>
 
-              <Col xs={12} md={6}>
-                <Form.Control
-                  type="text"
-                  placeholder="Answer 4"
-                  name="answerFour"
-                  value={formik.values.answerFour || ''}
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                />
-              </Col>
-            </Row>
-          </Aux>
-        ) : null}
-        <Button type="submit">Submit</Button>
-      </Form>
-    </Aux>
+            <Col xs={12} md={6}>
+              <Form.Control
+                type="text"
+                placeholder="Answer 4"
+                name="answers.answerFour"
+                value={formik.values.answers.answerFour}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+              />
+            </Col>
+          </Row>
+          <Row className={styles.Padding}>
+            <Col xs={12} md={12}>
+              <p>Correct Answer:</p>
+              <Form.Control
+                as="select"
+                name="correctAnswer"
+                value={formik.values.correctAnswer}
+                onBlur={formik.handleBlur}
+                onChange={formik.handleChange}
+              >
+                <option value="answerOne">1</option>
+                <option value="answerTwo">2</option>
+                <option value="answerThree">3</option>
+                <option value="answerFour">4</option>
+              </Form.Control>
+            </Col>
+          </Row>
+        </Aux>
+      ) : null}
+
+      <hr />
+      <Button type="submit">Save Question</Button>
+    </Form>
   );
 };
 

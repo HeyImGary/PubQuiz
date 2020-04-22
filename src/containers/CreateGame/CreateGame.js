@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Row, Col, Button, Form } from 'react-bootstrap';
+import { Button, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+
 import axios from '../../axios-add-questions';
 
+import NavButton from '../../component/UI/NavButton/NavButton';
+import styles from './CreateGame.module.css';
+import Aux from '../../hoc/Aux';
 import Test from '../Home/test';
-
-import CreateQuestion from '../../component/CreateQuestion/CreateQuestion';
-import MultiAnswer from '../../component/MultiAnswer/MultiAnswer';
 
 class CreateGame extends Component {
   state = {
@@ -14,6 +15,9 @@ class CreateGame extends Component {
     editState: {},
     questionNumber: 0,
     questions: [],
+    isMultiQuestion: null,
+    show: false,
+    roomId: '',
     edit: true,
   };
 
@@ -28,6 +32,7 @@ class CreateGame extends Component {
     const newQuestionState = [...this.state.questions, newQuestion];
     this.setState({
       questions: newQuestionState,
+      show: false,
       questionNumber: this.state.questionNumber + 1,
     });
   };
@@ -36,216 +41,90 @@ class CreateGame extends Component {
     console.log(this.state);
   };
 
-  // change = (e) => {
-  //   const { emptyState } = { ...this.state };
-  //   const currentState = emptyState;
-  //   const { name, value } = e.target;
+  save = () => {
+    const post = {
+      questions: this.state.questions,
+    };
 
-  //   currentState[name] = value;
+    axios
+      .post('/questions.json', post)
+      .then((responce) => this.setState({ roomId: responce.data.name }))
+      .catch((error) => console.log(error));
+  };
 
-  //   this.setState({
-  //     emptyState: currentState,
-  //   });
-  // };
-
-  // editChange = (e, id) => {
-  //   const temp = { ...this.state.questions[id] };
-  //   const currentState = temp;
-  //   const { name, value } = e.target;
-  //   currentState[name] = value;
-
-  //   const questions = [...this.state.questions];
-  //   questions[id] = currentState;
-
-  //   this.setState({
-  //     questions: questions,
-  //   });
-  // };
-
-  // onSubmit = (e) => {
-  //   this.AddQuestion(
-  //     this.state.questionNumber,
-  //     this.state.emptyState.question,
-  //     this.state.emptyState.answerOne,
-  //     this.state.emptyState.answerTwo,
-  //     this.state.emptyState.answerThree,
-  //     this.state.emptyState.answerFour
-  //   );
-  //   this.setState({
-  //     emptyState: {
-  //       question: '',
-  //       answerOne: '',
-  //       answerTwo: '',
-  //       answerThree: '',
-  //       answerFour: '',
-  //     },
-  //   });
-  // };
-
-  // save = () => {
-  //   const post = {
-  //     questions: this.state.questions,
-  //   };
-
-  //   axios
-  //     .post('/questions.json', post)
-  //     .then((responce) => alert(responce.data.name))
-  //     .catch((error) => console.log(error));
-  // };
-
-  // editQuestion = (id, bool) => {
-  //   const questionIndex = this.state.questions.findIndex((q) => {
-  //     return q.id === id;
-  //   });
-  //   const editQuestion = { ...this.state.questions[questionIndex] };
-
-  //   editQuestion.edit = bool;
-
-  //   const questions = [...this.state.questions];
-
-  //   questions[questionIndex] = editQuestion;
-
-  //   this.setState({
-  //     questions: questions,
-  //   });
-  // };
+  isMultiHandler = (bool) => {
+    this.setState({
+      show: true,
+      isMultiQuestion: bool,
+    });
+  };
 
   render() {
+    let questionForm = null;
+    if (this.state.show) {
+      questionForm = (
+        <Aux>
+          <Test
+            isEditing={true}
+            addQuestionHandler={(i) => this.AddQuestion(i)}
+            questionNumber={this.state.questionNumber}
+            isMulti={this.state.isMultiQuestion}
+            click={this.save}
+          />
+        </Aux>
+      );
+    }
+
     return (
-      <div>
-        <h1>hi</h1>
-        <Test addQuestionHandler={(i) => this.AddQuestion(i)} />
-        <Button onClick={this.printState}>ttt</Button>
-      </div>
+      <Aux>
+        <Col xs={12} md={{ span: 2, offset: 2 }} className={styles.BackBar}>
+          <Link to="/">
+            <h4>Back</h4>
+          </Link>
+        </Col>
+        <h1>Add Question</h1>
+        <h2>Room id: {this.state.roomId}</h2>
+        {this.state.questions.map((question) => (
+          <Aux>
+            <Row className={[styles.CenterContents, styles.MainRow]}>
+              <Col xs={12} md={12}>
+                <h4>Question: {question.question}</h4>
+              </Col>
 
-      // <div>
-      //   <Row>
-      //     <Col xs={12} md={{ span: 2, offset: 2 }} className="Card">
-      //       <Link to="/">
-      //         <h4>Back</h4>
-      //       </Link>
-      //     </Col>
-      //   </Row>
-      //   <br />
-      //   <Row>
-      //     <Col xs={12} md={12}>
-      //       {this.state.questions.map((q, index) => (
-      //         <Row className="justify-content-md-center" key={index}>
-      //           {q.edit ? (
-      //             <Col xs={12} md={6}>
-      //               <Form>
-      //                 <Row>
-      //                   <Col>
-      //                     <Form.Group controlId="question">
-      //                       <Form.Control
-      //                         as="textarea"
-      //                         rows="3"
-      //                         placeholder="Question"
-      //                         name="question"
-      //                         value={q.question}
-      //                         onChange={(e) => this.editChange(e, q.id)}
-      //                       />
-      //                     </Form.Group>
-      //                   </Col>
-      //                 </Row>
+              {question.answers !== null ? (
+                <Aux>
+                  <Col xs={12} md={6}>
+                    <p>Answer 1:{question.answers.answerOne}</p>
+                  </Col>
+                  <Col xs={12} md={6}>
+                    <p>Answer 2:{question.answers.answerTwo}</p>
+                  </Col>
+                  <Col xs={12} md={6}>
+                    <p>Answer 2:{question.answers.answerThree}</p>
+                  </Col>
+                  <Col xs={12} md={6}>
+                    <p>Answer 2:{question.answers.answerFour}</p>
+                  </Col>
+                  <Col xs={12} md={12}>
+                    <hr />
+                  </Col>
+                </Aux>
+              ) : null}
+            </Row>
+          </Aux>
+        ))}
+        <Button onClick={() => this.isMultiHandler(true)}>
+          Multiple Choice Question
+        </Button>
 
-      //                 <MultiAnswer
-      //                   values={q}
-      //                   change={(e) => this.editChange(e, q.id)}
-      //                 />
-
-      //                 <Row>
-      //                   <Col xs={12} md={12}>
-      //                     <Button
-      //                       variant="success"
-      //                       onClick={() => this.editQuestion(q.id, false)}
-      //                     >
-      //                       Save
-      //                     </Button>
-      //                   </Col>
-      //                 </Row>
-      //                 <hr />
-      //               </Form>
-      //             </Col>
-      //           ) : (
-      //             <Col xs={12} md={6}>
-      //               <Row>
-      //                 <Col>
-      //                   Questions {index}: {q.question}
-      //                 </Col>
-      //               </Row>
-
-      //               <Row>
-      //                 <Col xs={12} md={6}>
-      //                   Answer 1: {q.answerOne}
-      //                 </Col>
-
-      //                 <Col xs={12} md={6}>
-      //                   Answer 2 :{q.answerTwo}
-      //                 </Col>
-      //               </Row>
-
-      //               <Row>
-      //                 <Col xs={12} md={6}>
-      //                   Answer 3: {q.answerThree}
-      //                 </Col>
-
-      //                 <Col xs={12} md={6}>
-      //                   Answer 4: {q.answerFour}
-      //                 </Col>
-      //               </Row>
-      //               <Row>
-      //                 <Col xs={12} md={6}>
-      //                   <Button
-      //                     variant="danger"
-      //                     onClick={() => this.deleteQuestion(index)}
-      //                   >
-      //                     Delete
-      //                   </Button>
-      //                 </Col>
-
-      //                 <Col xs={12} md={6}>
-      //                   <Button
-      //                     variant="success"
-      //                     onClick={() => this.editQuestion(q.id, true)}
-      //                   >
-      //                     Edit
-      //                   </Button>
-      //                 </Col>
-      //               </Row>
-      //               <hr />
-      //             </Col>
-      //           )}
-      //         </Row>
-      //       ))}
-      //     </Col>
-      //   </Row>
-
-      //   <Row>
-      //     <Col>
-      //       {this.state.questions.length < 1 ? (
-      //         <h1>Press the '+' button to add a new question</h1>
-      //       ) : null}
-
-      //       <CreateQuestion
-      //         click={this.AddQuestion}
-      //         change={this.change}
-      //         values={this.state.emptyState}
-      //       />
-      //     </Col>
-      //   </Row>
-      //   <Row className="justify-content-md-center">
-      //     <Col xs={12} md={6}>
-      //       <Button onClick={(e) => this.onSubmit(e, 'create')}>
-      //         <h2>+</h2>
-      //       </Button>
-      //       <hr />
-      //       <Button variant="success" onClick={() => this.save()}>
-      //         Submit Questions
-      //       </Button>
-      //     </Col>
-      //   </Row>
-      // </div>
+        {this.state.show ? [questionForm] : null}
+        <br />
+        {this.state.questions.length > 0 ? (
+          <Button variant="success" onClick={() => this.save()}>
+            Submit Questions
+          </Button>
+        ) : null}
+      </Aux>
     );
   }
 }
