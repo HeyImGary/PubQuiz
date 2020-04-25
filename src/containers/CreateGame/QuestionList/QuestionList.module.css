@@ -1,0 +1,17 @@
+.CenterContent {
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  margin-top: 1vh;
+}
+
+.Padding {
+  margin-top: 1vh;
+}
+
+.BackBar {
+  justify-content: left;
+  text-align: left;
+  align-items: left;
+  position: absolute;
+}

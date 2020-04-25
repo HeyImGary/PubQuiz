@@ -6,6 +6,8 @@ import axios from '../../axios-add-questions';
 
 import NavButton from '../../component/UI/NavButton/NavButton';
 import styles from './CreateGame.module.css';
+
+import QuestionList from './QuestionList/QuestionList';
 import Aux from '../../hoc/Aux';
 import Test from '../Home/test';
 
@@ -21,11 +23,11 @@ class CreateGame extends Component {
     edit: true,
   };
 
-  // deleteQuestion = (questionIndex) => {
-  //   const questions = [...this.state.questions];
-  //   questions.splice(questionIndex, 1);
-  //   this.setState({ questions: questions });
-  // };
+  deleteQuestion = (questionIndex) => {
+    const questions = [...this.state.questions];
+    questions.splice(questionIndex, 1);
+    this.setState({ questions: questions });
+  };
 
   AddQuestion = (newQuestion) => {
     console.log(newQuestion);
@@ -84,35 +86,14 @@ class CreateGame extends Component {
         </Col>
         <h1>Add Question</h1>
         <h2>Room id: {this.state.roomId}</h2>
-        {this.state.questions.map((question) => (
-          <Aux>
-            <Row className={[styles.CenterContents, styles.MainRow]}>
-              <Col xs={12} md={12}>
-                <h4>Question: {question.question}</h4>
-              </Col>
 
-              {question.answers !== null ? (
-                <Aux>
-                  <Col xs={12} md={6}>
-                    <p>Answer 1:{question.answers.answerOne}</p>
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <p>Answer 2:{question.answers.answerTwo}</p>
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <p>Answer 2:{question.answers.answerThree}</p>
-                  </Col>
-                  <Col xs={12} md={6}>
-                    <p>Answer 2:{question.answers.answerFour}</p>
-                  </Col>
-                  <Col xs={12} md={12}>
-                    <hr />
-                  </Col>
-                </Aux>
-              ) : null}
-            </Row>
-          </Aux>
-        ))}
+        <QuestionList
+          questions={this.state.questions}
+          deleteQuestionHandler={(questionIndex) =>
+            this.deleteQuestion(questionIndex)
+          }
+        />
+
         <Button onClick={() => this.isMultiHandler(true)}>
           Multiple Choice Question
         </Button>

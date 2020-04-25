@@ -9,6 +9,7 @@ import styles from './Home.module.css';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 
 const Test = (props) => {
+  const isMultiQuestion = false;
   let question = [];
 
   const initialValues = {
