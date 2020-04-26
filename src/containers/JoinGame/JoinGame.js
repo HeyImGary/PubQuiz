@@ -15,14 +15,35 @@ import { Col } from 'react-bootstrap';
 class JoinGame extends Component {
   state = {
     questions: [],
+    roomId: null,
     questionNumber: 0,
     isFetching: false,
+    isCorrect: null,
   };
 
   roomIdHandler = (e) => {
     this.setState({
       roomId: e.target.value,
     });
+  };
+
+  updateQuestion = (id) => {
+    console.log('question');
+    // setInterval(
+    //   (id) =>
+    //     axios
+    //       .get('questions/' + id + '/questionNumber.json')
+    //       .then((responce) => {
+    //         console.log(responce.data);
+    //         if (responce.data !== this.state.questionNumber) {
+    //           this.setState({
+    //             questionNumber: responce.data,
+    //           });
+    //         }
+    //       })
+    //       .catch((error) => console.log(error)),
+    //   10000
+    // );
   };
 
   joinHandler = (id) => {
@@ -32,9 +53,12 @@ class JoinGame extends Component {
       .then((responce) => {
         this.setState({
           questions: responce.data.questions,
+          roomId: id,
+          questionNumber: responce.data.questionNumber,
           isFetching: false,
         });
       })
+      .then((id) => this.updateQuestion(id))
       .catch((error) => console.log(error));
   };
 
@@ -48,6 +72,20 @@ class JoinGame extends Component {
     }
   };
 
+  // selectAnswerHandler = (answer) => {
+  //   console.log(answer);
+  //   let t =
+  //     this.state.questions[this.state.questionNumber].correctAnswer === answer
+  //       ? true
+  //       : false;
+  //   console.log(t);
+  //   this.setState({
+  //     isCorrect: t,
+  //   });
+  // };
+
+  componentDidMount = () => {};
+
   render() {
     let questions = (
       <Join
@@ -55,19 +93,20 @@ class JoinGame extends Component {
         roomIdHandler={this.roomIdHandler}
       />
     );
-    let joined = false;
+
     if (this.state.questions.length !== 0) {
-      joined = true;
       questions = (
         <Answers
+          questionNumber={this.state.questionNumber}
+          selectAnswer={(answer) => this.selectAnswerHandler(answer)}
           values={this.state.questions[this.state.questionNumber]}
           nextQuestionHandler={this.nextQuestionHandler}
+          //isCorrect={this.state.isCorrect}
         />
       );
     }
 
     if (this.state.isFetching === true) {
-      joined = true;
       questions = <Spinner />;
     }
 

@@ -1,9 +1,9 @@
 .CenterContent {
-  display: block;
   justify-content: center;
   text-align: center;
+  align-items: center;
 }
 
 .MainRow {
-  padding-top: 30%;
+  padding-top: 20%;
 }

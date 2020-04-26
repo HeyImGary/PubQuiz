@@ -4,10 +4,13 @@ import './index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Home from './containers/Home/Home';
 import * as serviceWorker from './serviceWorker';
+import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Home />
+    <BrowserRouter>
+      <Home />
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -8,3 +8,10 @@
 .Padding {
   margin-top: 1vh;
 }
+
+.BackBar {
+  justify-content: left;
+  text-align: left;
+  align-items: left;
+  position: absolute;
+}
