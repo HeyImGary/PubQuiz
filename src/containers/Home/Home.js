@@ -4,7 +4,7 @@ import HomeScreen from '../../component/HomeScreen/HomeScreen';
 import JoinGame from '../JoinGame/JoinGame';
 import CreateGame from '../CreateGame/CreateGame';
 
-import test from './test';
+import Testing from '../test/Testing';
 
 import { BrowserRouter as Switch, Route } from 'react-router-dom';
 
@@ -23,7 +23,7 @@ class Home extends Component {
 
           <Route exact path="/create" component={CreateGame} />
 
-          <Route exact path="/test" component={test} />
+          <Route exact path="/test" component={Testing} />
         </Switch>
       </Container>
     );

@@ -12,28 +12,21 @@ const answers = (props) => (
     </Col>
 
     <Col xs={12} md={6}>
-      <AnswerButton click={() => props.selectAnswer('answerOne')}>
-        {props.values.answers.answerOne}
-      </AnswerButton>
+      <AnswerButton>{props.values.answers.answerOne}</AnswerButton>
     </Col>
     <Col xs={12} md={6}>
-      <AnswerButton click={() => props.selectAnswer('answerTwo')}>
-        {props.values.answers.answerTwo}
-      </AnswerButton>
+      <AnswerButton>{props.values.answers.answerTwo}</AnswerButton>
     </Col>
     <Col xs={12} md={6}>
-      <AnswerButton click={() => props.selectAnswer('answerThree')}>
-        {props.values.answers.answerThree}
-      </AnswerButton>
+      <AnswerButton>{props.values.answers.answerThree}</AnswerButton>
     </Col>
     <Col xs={12} md={6}>
-      <AnswerButton click={() => props.selectAnswer('answerFour')}>
-        {props.values.answers.answerFour}
-      </AnswerButton>
+      <AnswerButton>{props.values.answers.answerFour}</AnswerButton>
     </Col>
-    <br />
+
     <Col xs={12} md={12}>
-      <Button onClick={() => props.nextQuestionHandler()}>Next Question</Button>
+      <br />
+      {/* <Button onClick={() => props.nextQuestionHandler()}>Next Question</Button> */}
     </Col>
   </Row>
 );

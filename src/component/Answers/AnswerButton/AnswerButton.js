@@ -1,12 +1,16 @@
 import React from 'react';
 import styles from './AnswerButton.module.css';
 
-const answerButton = (props) => {
-  let style = styles.NavButton;
+let style = styles.NavButton;
 
-  if (props.correct) style = styles.Correct;
+const answerButton = (props) => {
+  const clicked = () => {
+    style = styles.Selected;
+    console.log('what?', style);
+  };
+
   return (
-    <div onClick={() => props.click()} className={style}>
+    <div onClick={() => clicked()} tabindex="1" className={styles.NavButton}>
       <h2>{props.children}</h2>
     </div>
   );

@@ -10,11 +10,12 @@ import Join from './join';
 import Aux from '../../hoc/Aux';
 
 import axios from '../../axios-add-questions';
-import { Row, Col } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 
 class JoinGame extends Component {
   state = {
     questions: [],
+    roomId: null,
     questionNumber: 0,
     isFetching: false,
     isCorrect: null,
@@ -26,6 +27,25 @@ class JoinGame extends Component {
     });
   };
 
+  updateQuestion = (id) => {
+    console.log('question');
+    // setInterval(
+    //   (id) =>
+    //     axios
+    //       .get('questions/' + id + '/questionNumber.json')
+    //       .then((responce) => {
+    //         console.log(responce.data);
+    //         if (responce.data !== this.state.questionNumber) {
+    //           this.setState({
+    //             questionNumber: responce.data,
+    //           });
+    //         }
+    //       })
+    //       .catch((error) => console.log(error)),
+    //   10000
+    // );
+  };
+
   joinHandler = (id) => {
     this.setState({ isFetching: true });
     axios
@@ -33,9 +53,12 @@ class JoinGame extends Component {
       .then((responce) => {
         this.setState({
           questions: responce.data.questions,
+          roomId: id,
+          questionNumber: responce.data.questionNumber,
           isFetching: false,
         });
       })
+      .then((id) => this.updateQuestion(id))
       .catch((error) => console.log(error));
   };
 
@@ -49,17 +72,19 @@ class JoinGame extends Component {
     }
   };
 
-  selectAnswerHandler = (answer) => {
-    console.log(answer);
-    let t =
-      this.state.questions[this.state.questionNumber].correctAnswer === answer
-        ? true
-        : false;
-    console.log(t);
-    this.setState({
-      isCorrect: t,
-    });
-  };
+  // selectAnswerHandler = (answer) => {
+  //   console.log(answer);
+  //   let t =
+  //     this.state.questions[this.state.questionNumber].correctAnswer === answer
+  //       ? true
+  //       : false;
+  //   console.log(t);
+  //   this.setState({
+  //     isCorrect: t,
+  //   });
+  // };
+
+  componentDidMount = () => {};
 
   render() {
     let questions = (
@@ -72,10 +97,11 @@ class JoinGame extends Component {
     if (this.state.questions.length !== 0) {
       questions = (
         <Answers
+          questionNumber={this.state.questionNumber}
           selectAnswer={(answer) => this.selectAnswerHandler(answer)}
           values={this.state.questions[this.state.questionNumber]}
           nextQuestionHandler={this.nextQuestionHandler}
-          isCorrect={this.state.isCorrect}
+          //isCorrect={this.state.isCorrect}
         />
       );
     }
@@ -93,7 +119,7 @@ class JoinGame extends Component {
             </Link>
           </Col>
         )}
-        {this.state.isCorrect ? <h1>Correct!</h1> : <h1>Wrong!</h1>}
+
         {[questions]}
       </Aux>
     );
