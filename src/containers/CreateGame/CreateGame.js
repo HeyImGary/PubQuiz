@@ -10,6 +10,7 @@ import styles from './CreateGame.module.css';
 import QuestionList from './QuestionList/QuestionList';
 import Aux from '../../hoc/Aux';
 import Test from '../Home/test';
+import { Scope } from '@babel/traverse';
 
 class CreateGame extends Component {
   state = {
@@ -27,7 +28,47 @@ class CreateGame extends Component {
     show: false,
     roomId: '',
     edit: true,
+    questionType:'img',
+    files: ''
   };
+
+  
+
+  uploadImageHandler(e) {
+
+    const Scope = this
+    // get the files
+    const files = e.target.files; // Process each file
+    
+    let allFiles = [];
+
+    const file = files[0]; // Make new FileReader
+
+    const reader = new FileReader(); // Convert the file to base64 text
+    
+    reader.readAsDataURL(file); // on reader load somthing...
+
+    reader.onload = function () {
+      // Make a fileInfo Object
+      const fileInfo = {
+        name: file.name,
+        type: file.type,
+        size: Math.round(file.size / 1000) + ' kB',
+        base64: reader.result,
+        file: file
+      }; // Push it to the state
+
+      allFiles.push(fileInfo); // If all files have been proceed
+      console.log(allFiles[0])
+      if(allFiles.length === files.length){
+        // Apply Callback function
+        //files = allFiles[0]
+        //getFiles(allFiles[0]);
+        
+        Scope.setState({files: allFiles[0].base64})
+      }
+    } // reader.onload
+  }
 
   deleteQuestion = (questionIndex) => {
     const questions = [...this.state.questions];
@@ -75,6 +116,10 @@ class CreateGame extends Component {
     });
   };
 
+  logState = () => {
+    console.log(this.state)
+  }
+
   render() {
     let questionForm = null;
     if (this.state.show) {
@@ -82,6 +127,7 @@ class CreateGame extends Component {
         <Aux>
           <Test
             isEditing={true}
+            questionType={this.state.questionType}
             addQuestionHandler={(i) => this.AddQuestion(i)}
             questionNumber={this.state.questionNumber}
             isMulti={this.state.isMultiQuestion}
@@ -107,9 +153,14 @@ class CreateGame extends Component {
             this.deleteQuestion(questionIndex)
           }
         />
-
+        <input type='file' onChange={(e) => this.uploadImageHandler(e)} />
+        <img src={this.state.files} />
         <Button onClick={() => this.isMultiHandler(true)}>
           Multiple Choice Question
+        </Button>
+
+        <Button onClick={() => this.logState()}>
+          console
         </Button>
 
         {this.state.show ? [questionForm] : null}
