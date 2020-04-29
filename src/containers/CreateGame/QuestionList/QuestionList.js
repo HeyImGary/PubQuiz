@@ -6,14 +6,21 @@ import Aux from '../../../hoc/Aux';
 import { Button, Row, Col } from 'react-bootstrap';
 
 const questionList = (props) =>
-  props.questions.map((question) => (
+  props.questions.map((question, index) => (
     <Aux>
       <Row className={styles.CenterContents}>
         <Col xs={12} md={12}>
-          <h4>Question: {question.question}</h4>
+          <h4>
+            Question {index + 1}: {question.question}
+          </h4>
         </Col>
+        {question.questionType === 'img' ? (
+          <Col xs={12} md={12} className={styles.CenterContents}>
+            <img src={question.image} className={styles.ImageHeight} />
+          </Col>
+        ) : null}
 
-        {question.answers !== null ? (
+        {question.answerType === 'multi' ? (
           <Aux>
             <Col xs={12} md={6}>
               <p>Answer 1:{question.answers.answerOne}</p>

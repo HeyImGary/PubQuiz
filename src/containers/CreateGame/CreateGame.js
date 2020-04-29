@@ -18,48 +18,33 @@ class CreateGame extends Component {
     questionProps: [
       {
         questionType: null,
-        answersType: null,
+        answerType: null,
       },
     ],
     isMultiQuestion: null,
     show: false,
     edit: true,
-    questionType: 'img',
+    questionType: null,
     files: '',
   };
 
   uploadImageHandler(e) {
-    const _this = this;
     // get the files
-    const files = e.target.files; // Process each file
+    const files = e.target.files;
+    // Process each file
 
-    let allFiles = [];
+    const file = files[0];
+    // Make new FileReader
 
-    const file = files[0]; // Make new FileReader
+    const reader = new FileReader();
+    // Convert the file to base64 text
 
-    const reader = new FileReader(); // Convert the file to base64 text
+    // on reader load somthing...
+    reader.readAsDataURL(file);
 
-    reader.readAsDataURL(file); // on reader load somthing...
-
-    reader.onload = function () {
-      // Make a fileInfo Object
-      const fileInfo = {
-        name: file.name,
-        type: file.type,
-        size: Math.round(file.size / 1000) + ' kB',
-        base64: reader.result,
-        file: file,
-      }; // Push it to the state
-
-      allFiles.push(fileInfo); // If all files have been proceed
-      if (allFiles.length === files.length) {
-        // Apply Callback function
-        //files = allFiles[0]
-        //getFiles(allFiles[0]);
-        return allFiles[0].base64;
-      }
-    }; // reader.onload
-    console.log(allFiles[0]);
+    reader.onload = () => {
+      this.setState({ files: reader.result });
+    };
   }
 
   deleteQuestion = (questionIndex) => {
@@ -74,6 +59,7 @@ class CreateGame extends Component {
     this.setState({
       questions: newQuestionState,
       show: false,
+      files: '',
       questionNumber: this.state.questionNumber + 1,
     });
   };
@@ -94,7 +80,7 @@ class CreateGame extends Component {
     let questionPropsCopy = this.state.questionProps;
 
     prop === 'answerType'
-      ? (questionPropsCopy[0].answersType = value)
+      ? (questionPropsCopy[0].answerType = value)
       : (questionPropsCopy[0].questionType = value);
     console.log(questionPropsCopy);
     this.setState({
@@ -113,6 +99,8 @@ class CreateGame extends Component {
       questionForm = (
         <Aux>
           <Test
+            uploadImageHandler={(e) => this.uploadImageHandler(e)}
+            image={this.state.files}
             isEditing={true}
             questionType={this.state.questionType}
             addQuestionHandler={(i) => this.AddQuestion(i)}
