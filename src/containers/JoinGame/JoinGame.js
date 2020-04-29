@@ -5,7 +5,7 @@ import styles from './JoinGame.module.css';
 
 import Spinner from '../../component/UI/Spinner/Spinner';
 
-import Answers from '../../component/Answers/Answers';
+import Answers from './Answers/Answers.js';
 import Join from './join';
 import Aux from '../../hoc/Aux';
 

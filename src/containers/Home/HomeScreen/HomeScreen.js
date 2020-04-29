@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 import styles from './HomeScreen.module.css';
 
-import NavButton from '../UI/NavButton/NavButton';
-import Aux from '../../hoc/Aux';
+import NavButton from '../../../component/UI/NavButton/NavButton';
+import Aux from '../../../hoc/Aux';
 
 const homeScreen = () => {
   return (

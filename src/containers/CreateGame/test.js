@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 
 import Aux from '../../hoc/Aux';
 
-import styles from './Home.module.css';
+import styles from './CreateGame.module.css';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 
 const Test = (props) => {
@@ -71,6 +71,7 @@ const Test = (props) => {
 
   return (
     <Form onSubmit={formik.handleSubmit} className={styles.CenterContent}>
+      {JSON.stringify(formik, null, 2)}
       <Row>
         <Col xs={12} md={12}>
           <Form.Control
@@ -84,7 +85,20 @@ const Test = (props) => {
           />
         </Col>
       </Row>
-      {props.isMulti ? (
+      {props.questionProps.questionType === 'img' ? (
+        <Row>
+          <Col xs={12} md={4}>
+            <Form.File
+              placeholder="Image"
+              name="image"
+              value={formik.values.image}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+            />
+          </Col>
+        </Row>
+      ) : null}
+      {props.questionProps.answersType === 'multi' ? (
         <Aux>
           <Row className={styles.Padding}>
             <Col xs={12} md={6}>

@@ -3,7 +3,7 @@ import { Row, Col, Button } from 'react-bootstrap';
 
 import styles from './Answers.module.css';
 
-import AnswerButton from './AnswerButton/AnswerButton';
+import AnswerButton from '../../../component/UI/AnswerButton/AnswerButton';
 
 const answers = (props) => (
   <Row className={[styles.CenterContents, styles.MainRow]}>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-import HomeScreen from '../../component/HomeScreen/HomeScreen';
+import HomeScreen from './HomeScreen/HomeScreen.js';
 import JoinGame from '../JoinGame/JoinGame';
 import CreateGame from '../CreateGame/CreateGame';
 

@@ -9,19 +9,58 @@ import styles from './CreateGame.module.css';
 
 import QuestionList from './QuestionList/QuestionList';
 import Aux from '../../hoc/Aux';
-import Test from '../Home/test';
+import Test from './test.js';
 
 class CreateGame extends Component {
   state = {
-    emptyState: {},
-    editState: {},
     questionNumber: 0,
     questions: [],
+    questionProps: [
+      {
+        questionType: null,
+        answersType: null,
+      },
+    ],
     isMultiQuestion: null,
     show: false,
-    roomId: '',
     edit: true,
+    questionType: 'img',
+    files: '',
   };
+
+  uploadImageHandler(e) {
+    const _this = this;
+    // get the files
+    const files = e.target.files; // Process each file
+
+    let allFiles = [];
+
+    const file = files[0]; // Make new FileReader
+
+    const reader = new FileReader(); // Convert the file to base64 text
+
+    reader.readAsDataURL(file); // on reader load somthing...
+
+    reader.onload = function () {
+      // Make a fileInfo Object
+      const fileInfo = {
+        name: file.name,
+        type: file.type,
+        size: Math.round(file.size / 1000) + ' kB',
+        base64: reader.result,
+        file: file,
+      }; // Push it to the state
+
+      allFiles.push(fileInfo); // If all files have been proceed
+      if (allFiles.length === files.length) {
+        // Apply Callback function
+        //files = allFiles[0]
+        //getFiles(allFiles[0]);
+        return allFiles[0].base64;
+      }
+    }; // reader.onload
+    console.log(allFiles[0]);
+  }
 
   deleteQuestion = (questionIndex) => {
     const questions = [...this.state.questions];
@@ -39,11 +78,7 @@ class CreateGame extends Component {
     });
   };
 
-  printState = () => {
-    console.log(this.state);
-  };
-
-  save = () => {
+  uploadQuizHandler = () => {
     const post = {
       questions: this.state.questions,
     };
@@ -54,11 +89,22 @@ class CreateGame extends Component {
       .catch((error) => console.log(error));
   };
 
-  isMultiHandler = (bool) => {
+  questionPropsHandler = (prop, value) => {
+    console.log(prop, value);
+    let questionPropsCopy = this.state.questionProps;
+
+    prop === 'answerType'
+      ? (questionPropsCopy[0].answersType = value)
+      : (questionPropsCopy[0].questionType = value);
+    console.log(questionPropsCopy);
     this.setState({
       show: true,
-      isMultiQuestion: bool,
+      questionProps: questionPropsCopy,
     });
+  };
+
+  logState = () => {
+    console.log(this.state);
   };
 
   render() {
@@ -68,10 +114,11 @@ class CreateGame extends Component {
         <Aux>
           <Test
             isEditing={true}
+            questionType={this.state.questionType}
             addQuestionHandler={(i) => this.AddQuestion(i)}
             questionNumber={this.state.questionNumber}
-            isMulti={this.state.isMultiQuestion}
-            click={this.save}
+            questionProps={this.state.questionProps[0]}
+            uploadQuizHandler={this.uploadQuizHandler}
           />
         </Aux>
       );
@@ -84,8 +131,8 @@ class CreateGame extends Component {
             <h4>Back</h4>
           </Link>
         </Col>
+
         <h1>Add Question</h1>
-        <h2>Room id: {this.state.roomId}</h2>
 
         <QuestionList
           questions={this.state.questions}
@@ -94,14 +141,43 @@ class CreateGame extends Component {
           }
         />
 
-        <Button onClick={() => this.isMultiHandler(true)}>
+        {/* <input type="file" onChange={(e) => this.uploadImageHandler(e)} />
+        <img src={this.state.files} /> */}
+
+        <Button
+          onClick={() => this.questionPropsHandler('questionType', 'img')}
+        >
+          Image
+        </Button>
+
+        <Button
+          onClick={() => this.questionPropsHandler('questionType', 'text')}
+        >
+          text
+        </Button>
+        <br />
+
+        <Button
+          onClick={() => this.questionPropsHandler('answerType', 'multi')}
+        >
           Multiple Choice Question
         </Button>
 
-        {this.state.show ? [questionForm] : null}
+        <Button onClick={() => this.questionPropsHandler('answerType', 'text')}>
+          Text Question
+        </Button>
+
         <br />
+        <Button onClick={() => this.logState()}>log console</Button>
+
+        {/* <Button onClick={() => this.logState()}>console</Button> */}
+
+        {this.state.show ? [questionForm] : null}
+
+        <br />
+
         {this.state.questions.length > 0 ? (
-          <Button variant="success" onClick={() => this.save()}>
+          <Button variant="success" onClick={() => this.uploadQuizHandler()}>
             Submit Questions
           </Button>
         ) : null}
