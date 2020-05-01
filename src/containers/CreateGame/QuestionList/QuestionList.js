@@ -2,7 +2,7 @@ import React from 'react';
 
 import styles from './QuestionList.module.css';
 
-import Aux from '../../../hoc/Aux';
+import Aux from '../../../hoc/Aux.js';
 import { Button, Row, Col } from 'react-bootstrap';
 
 const questionList = (props) =>
