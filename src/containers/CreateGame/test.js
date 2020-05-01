@@ -63,7 +63,6 @@ const Test = (props) => {
           answerType: props.questionProps.answerType,
           id: props.questionNumber,
           image: props.image === '' ? null : props.image,
-          isMulti: props.isMulti,
           correctAnswer: values.correctAnswer,
         },
       ];

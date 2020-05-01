@@ -11,6 +11,8 @@ import QuestionList from './QuestionList/QuestionList';
 import Aux from '../../hoc/Aux';
 import Test from './test.js';
 
+import firebase from '../../firestore';
+
 class CreateGame extends Component {
   state = {
     questionNumber: 0,
@@ -69,10 +71,32 @@ class CreateGame extends Component {
       questions: this.state.questions,
     };
 
-    axios
-      .post('/questions.json', post)
-      .then((responce) => this.setState({ roomId: responce.data.name }))
-      .catch((error) => console.log(error));
+    const questions = firebase.db
+      // .collection('questions')
+      // .doc()
+      // .collection('questions')
+      // .add({ ...this.state.questions })
+      // .then(function (docRef) {
+      //   console.log('Document written with ID: ', docRef.id);
+      // })
+      // .catch(function (error) {
+      //   console.error('Error adding document: ', error);
+      // });
+      .collection('questions')
+      .doc('eFnyPXNGZNnwea6UAb2H')
+      .collection('answers')
+      .doc('Gary')
+      .update({ 2: 'test2' })
+      .then(function (docRef) {
+        console.log('Document written with ID: ');
+      })
+      .catch(function (error) {
+        console.error('Error adding document: ', error);
+      });
+    // axios
+    //   .post('/questions.json', post)
+    //   .then((responce) => this.setState({ roomId: responce.data.name }))
+    //   .catch((error) => console.log(error));
   };
 
   questionPropsHandler = (prop, value) => {
