@@ -11,7 +11,7 @@ import { BrowserRouter as Switch, Route } from 'react-router-dom';
 
 import { Container } from 'react-bootstrap';
 
-import styles from './Home.module.css';
+import styles from './Home.module.css'
 
 class Home extends Component {
   render() {

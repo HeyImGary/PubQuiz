@@ -9,12 +9,14 @@ import styles from './CreateGame.module.css';
 
 import QuestionList from './QuestionList/QuestionList';
 import Aux from '../../hoc/Aux';
+
 import Test from './test.js';
 
 import firebase from '../../firestore';
 
 class CreateGame extends Component {
   state = {
+
     questionNumber: 0,
     questions: [],
     questionProps: [
@@ -65,6 +67,7 @@ class CreateGame extends Component {
       questionNumber: this.state.questionNumber + 1,
     });
   };
+
 
   uploadQuizHandler = () => {
     const post = {
