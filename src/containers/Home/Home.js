@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
-import HomeScreen from '../../component/HomeScreen/HomeScreen';
+import HomeScreen from './HomeScreen/HomeScreen.js';
 import JoinGame from '../JoinGame/JoinGame';
 import CreateGame from '../CreateGame/CreateGame';
 
@@ -10,7 +11,7 @@ import { BrowserRouter as Switch, Route } from 'react-router-dom';
 
 import { Container } from 'react-bootstrap';
 
-import styles from './Home.module.css';
+import styles from './Home.module.css'
 
 class Home extends Component {
   render() {

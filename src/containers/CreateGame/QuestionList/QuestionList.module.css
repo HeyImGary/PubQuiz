@@ -9,6 +9,10 @@
   margin-top: 1vh;
 }
 
+.ImageHeight {
+  height: 20vh;
+}
+
 .BackBar {
   justify-content: left;
   text-align: left;

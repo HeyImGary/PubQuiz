@@ -5,12 +5,14 @@ import styles from './JoinGame.module.css';
 
 import Spinner from '../../component/UI/Spinner/Spinner';
 
-import Answers from '../../component/Answers/Answers';
+import Answers from './Answers/Answers.js';
 import Join from './join';
 import Aux from '../../hoc/Aux';
 
 import axios from '../../axios-add-questions';
 import { Col } from 'react-bootstrap';
+
+import firebase from '../../firestore'
 
 class JoinGame extends Component {
   state = {
@@ -19,6 +21,9 @@ class JoinGame extends Component {
     questionNumber: 0,
     isFetching: false,
     isCorrect: null,
+    answers: [],
+    disabled: false,
+    userName: null
   };
 
   roomIdHandler = (e) => {
@@ -29,67 +34,74 @@ class JoinGame extends Component {
 
   updateQuestion = (id) => {
     console.log('question');
-    // setInterval(
-    //   (id) =>
-    //     axios
-    //       .get('questions/' + id + '/questionNumber.json')
-    //       .then((responce) => {
-    //         console.log(responce.data);
-    //         if (responce.data !== this.state.questionNumber) {
-    //           this.setState({
-    //             questionNumber: responce.data,
-    //           });
-    //         }
-    //       })
-    //       .catch((error) => console.log(error)),
-    //   10000
-    // );
-  };
-
-  joinHandler = (id) => {
-    this.setState({ isFetching: true });
-    axios
-      .get('questions/' + id + '.json')
-      .then((responce) => {
-        this.setState({
-          questions: responce.data.questions,
-          roomId: id,
-          questionNumber: responce.data.questionNumber,
-          isFetching: false,
-        });
+    const questionNumber = firebase.db
+      .collection('questions')
+      .doc('eFnyPXNGZNnwea6UAb2H')
+      .collection('questionProperties')
+      
+      
+      questionNumber.onSnapshot(e => {
+        e.forEach(q => {
+          this.stateState({questionNumber: q.data().questionNumber})
+        })
       })
-      .then((id) => this.updateQuestion(id))
-      .catch((error) => console.log(error));
   };
 
-  nextQuestionHandler = () => {
-    let questionNumber = this.state.questionNumber;
-    if (questionNumber !== this.state.questions.length - 1) {
-      questionNumber += 1;
-      this.setState({
-        questionNumber: questionNumber,
-      });
-    }
+  joinHandler = (id, userName) => {
+    console.log("test", userName)
+    this.setState({ isFetching: true });
+    const questions = firebase.db
+      .collection('questions')
+      .doc(id)
+      
+    questions.collection('questions').get().then(e => {
+        e.forEach(q => {
+          
+          console.log("hi")
+          this.setState({
+            questions: q.data(),
+            isFetching: false,
+            roomId:id,
+            userName: userName
+          })
+        })
+    })
+
+      questions.collection('questionProperties').onSnapshot(e => {
+        e.forEach(q => {
+          this.setState({questionNumber: q.data().questionNumber, disabled: false})
+        })
+      })
   };
 
-  // selectAnswerHandler = (answer) => {
-  //   console.log(answer);
-  //   let t =
-  //     this.state.questions[this.state.questionNumber].correctAnswer === answer
-  //       ? true
-  //       : false;
-  //   console.log(t);
-  //   this.setState({
-  //     isCorrect: t,
-  //   });
-  // };
+  sendAnswer = () => {
+    console.log(this.state.userName)
+    const questions = firebase.db
+      .collection('questions')
+      .doc(this.state.roomId)
+      .collection("answers")
+      .doc(this.state.userName)
 
-  componentDidMount = () => {};
+      this.state.questionNumber === 0 ? questions.set({answers: this.state.answers}) : questions.update({answers: this.state.answers})
+  }
+
+  addAnswer = (answer) =>{
+    this.setState({
+      disabled: true,
+      answers:[...this.state.answers, answer]
+    }, () => {
+    this.sendAnswer()
+    })
+  }
+
+  logState = () => {
+    console.log(this.state)
+  }
 
   render() {
     let questions = (
       <Join
-        joinHandler={(id) => this.joinHandler(id)}
+        joinHandler={this.joinHandler}
         roomIdHandler={this.roomIdHandler}
       />
     );
@@ -97,11 +109,12 @@ class JoinGame extends Component {
     if (this.state.questions.length !== 0) {
       questions = (
         <Answers
+          disabled={this.state.disabled}
+          addAnswerHandler={this.addAnswer}
           questionNumber={this.state.questionNumber}
           selectAnswer={(answer) => this.selectAnswerHandler(answer)}
           values={this.state.questions[this.state.questionNumber]}
           nextQuestionHandler={this.nextQuestionHandler}
-          //isCorrect={this.state.isCorrect}
         />
       );
     }

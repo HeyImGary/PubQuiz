@@ -9,19 +9,47 @@ import styles from './CreateGame.module.css';
 
 import QuestionList from './QuestionList/QuestionList';
 import Aux from '../../hoc/Aux';
-import Test from '../Home/test';
+
+import Test from './test.js';
+
+import firebase from '../../firestore';
 
 class CreateGame extends Component {
   state = {
-    emptyState: {},
-    editState: {},
+
     questionNumber: 0,
     questions: [],
+    questionProps: [
+      {
+        questionType: null,
+        answerType: null,
+      },
+    ],
     isMultiQuestion: null,
     show: false,
-    roomId: '',
     edit: true,
+    questionType: null,
+    files: '',
   };
+
+  uploadImageHandler(e) {
+    // get the files
+    const files = e.target.files;
+    // Process each file
+
+    const file = files[0];
+    // Make new FileReader
+
+    const reader = new FileReader();
+    // Convert the file to base64 text
+
+    // on reader load somthing...
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      this.setState({ files: reader.result });
+    };
+  }
 
   deleteQuestion = (questionIndex) => {
     const questions = [...this.state.questions];
@@ -35,30 +63,61 @@ class CreateGame extends Component {
     this.setState({
       questions: newQuestionState,
       show: false,
+      files: '',
       questionNumber: this.state.questionNumber + 1,
     });
   };
 
-  printState = () => {
-    console.log(this.state);
-  };
 
-  save = () => {
+  uploadQuizHandler = () => {
     const post = {
       questions: this.state.questions,
     };
 
-    axios
-      .post('/questions.json', post)
-      .then((responce) => this.setState({ roomId: responce.data.name }))
-      .catch((error) => console.log(error));
+    const questions = firebase.db
+      // .collection('questions')
+      // .doc()
+      // .collection('questions')
+      // .add({ ...this.state.questions })
+      // .then(function (docRef) {
+      //   console.log('Document written with ID: ', docRef.id);
+      // })
+      // .catch(function (error) {
+      //   console.error('Error adding document: ', error);
+      // });
+      .collection('questions')
+      .doc('eFnyPXNGZNnwea6UAb2H')
+      .collection('answers')
+      .doc('Gary')
+      .update({ 2: 'test2' })
+      .then(function (docRef) {
+        console.log('Document written with ID: ');
+      })
+      .catch(function (error) {
+        console.error('Error adding document: ', error);
+      });
+    // axios
+    //   .post('/questions.json', post)
+    //   .then((responce) => this.setState({ roomId: responce.data.name }))
+    //   .catch((error) => console.log(error));
   };
 
-  isMultiHandler = (bool) => {
+  questionPropsHandler = (prop, value) => {
+    console.log(prop, value);
+    let questionPropsCopy = this.state.questionProps;
+
+    prop === 'answerType'
+      ? (questionPropsCopy[0].answerType = value)
+      : (questionPropsCopy[0].questionType = value);
+    console.log(questionPropsCopy);
     this.setState({
       show: true,
-      isMultiQuestion: bool,
+      questionProps: questionPropsCopy,
     });
+  };
+
+  logState = () => {
+    console.log(this.state);
   };
 
   render() {
@@ -67,11 +126,14 @@ class CreateGame extends Component {
       questionForm = (
         <Aux>
           <Test
+            uploadImageHandler={(e) => this.uploadImageHandler(e)}
+            image={this.state.files}
             isEditing={true}
+            questionType={this.state.questionType}
             addQuestionHandler={(i) => this.AddQuestion(i)}
             questionNumber={this.state.questionNumber}
-            isMulti={this.state.isMultiQuestion}
-            click={this.save}
+            questionProps={this.state.questionProps[0]}
+            uploadQuizHandler={this.uploadQuizHandler}
           />
         </Aux>
       );
@@ -84,8 +146,8 @@ class CreateGame extends Component {
             <h4>Back</h4>
           </Link>
         </Col>
+
         <h1>Add Question</h1>
-        <h2>Room id: {this.state.roomId}</h2>
 
         <QuestionList
           questions={this.state.questions}
@@ -94,14 +156,43 @@ class CreateGame extends Component {
           }
         />
 
-        <Button onClick={() => this.isMultiHandler(true)}>
+        {/* <input type="file" onChange={(e) => this.uploadImageHandler(e)} />
+        <img src={this.state.files} /> */}
+
+        <Button
+          onClick={() => this.questionPropsHandler('questionType', 'img')}
+        >
+          Image
+        </Button>
+
+        <Button
+          onClick={() => this.questionPropsHandler('questionType', 'text')}
+        >
+          text
+        </Button>
+        <br />
+
+        <Button
+          onClick={() => this.questionPropsHandler('answerType', 'multi')}
+        >
           Multiple Choice Question
         </Button>
 
-        {this.state.show ? [questionForm] : null}
+        <Button onClick={() => this.questionPropsHandler('answerType', 'text')}>
+          Text Question
+        </Button>
+
         <br />
+        <Button onClick={() => this.logState()}>log console</Button>
+
+        {/* <Button onClick={() => this.logState()}>console</Button> */}
+
+        {this.state.show ? [questionForm] : null}
+
+        <br />
+
         {this.state.questions.length > 0 ? (
-          <Button variant="success" onClick={() => this.save()}>
+          <Button variant="success" onClick={() => this.uploadQuizHandler()}>
             Submit Questions
           </Button>
         ) : null}

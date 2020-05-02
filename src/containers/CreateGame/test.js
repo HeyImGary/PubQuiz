@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 
 import Aux from '../../hoc/Aux';
 
-import styles from './Home.module.css';
+import styles from './CreateGame.module.css';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 
 const Test = (props) => {
@@ -55,9 +55,14 @@ const Test = (props) => {
         ...question,
         {
           question: values.question,
-          answers: props.isMulti ? { ...values.answers } : null,
+          answers:
+            props.questionProps.answerType === 'multi'
+              ? { ...values.answers }
+              : null,
+          questionType: props.questionProps.questionType,
+          answerType: props.questionProps.answerType,
           id: props.questionNumber,
-          isMulti: props.isMulti,
+          image: props.image === '' ? null : props.image,
           correctAnswer: values.correctAnswer,
         },
       ];
@@ -71,11 +76,13 @@ const Test = (props) => {
 
   return (
     <Form onSubmit={formik.handleSubmit} className={styles.CenterContent}>
+      {/* {JSON.stringify(formik, null, 2)} */}
+
       <Row>
         <Col xs={12} md={12}>
           <Form.Control
             as="textarea"
-            rows="3"
+            rows="2"
             placeholder="Question"
             name="question"
             value={formik.values.question}
@@ -84,7 +91,26 @@ const Test = (props) => {
           />
         </Col>
       </Row>
-      {props.isMulti ? (
+
+      {props.questionProps.questionType === 'img' && props.image === '' ? (
+        <Row className={styles.CenterContent}>
+          <Col xs={12} md={3}>
+            <Form.File
+              placeholder="Image"
+              name="image"
+              value={formik.values.image}
+              onBlur={formik.handleBlur}
+              onChange={props.uploadImageHandler}
+            />
+          </Col>
+        </Row>
+      ) : null}
+      {props.image !== '' ? (
+        <Row className={styles.CenterContent}>
+          <img src={props.image} className={styles.ImageHeight} />
+        </Row>
+      ) : null}
+      {props.questionProps.answerType === 'multi' ? (
         <Aux>
           <Row className={styles.Padding}>
             <Col xs={12} md={6}>
@@ -133,6 +159,7 @@ const Test = (props) => {
               />
             </Col>
           </Row>
+
           <Row className={styles.Padding}>
             <Col xs={12} md={12}>
               <p>Correct Answer:</p>
