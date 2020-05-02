@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import FileBase64 from 'react-file-base64';
 import axios from '../../axios-add-questions';
 import { Form } from 'react-bootstrap';
+import _ from 'lodash';
 
-import A from './a'
+import A from './a';
 
 import firebase from '../../firestore';
 
@@ -12,105 +13,105 @@ class Testing extends Component {
   state = {
     files: [],
     image: '',
-    answers:[],
-    users:[],
+    answers: [],
+    users: [],
     questions: [],
-    test: ["test", "50", "13", "45"],
+    test: ['test', '50', '13', '45'],
     isSet: false,
   };
 
   change = (e, c) => {
-    let tempp = this.state.test
+    let tempp = this.state.test;
 
     tempp[e] = c;
 
-    console.log(tempp)
+    console.log(tempp);
 
     //this.setState({ file: e.target.files[0] });
   };
 
   addToAnswers = () => {
-    const answers = firebase.db
-      .collection('questions')
-      .doc('eFnyPXNGZNnwea6UAb2H')
-      .collection('answers')
-      .doc("Richard")
-      .update({answers:this.state.test})
-  }
+    // const answers = firebase.db
+    //   .collection('questions')
+    //   .doc('eFnyPXNGZNnwea6UAb2H')
+    //   .collection('answers')
+    //   .doc("Richard")
+    //   .update({answers:this.state.test})
+    console.log(_.uniqueId());
+  };
 
   getQuestions = () => {
     const answers = firebase.db
       .collection('questions')
       .doc('eFnyPXNGZNnwea6UAb2H')
-      .collection('questions')
-      let t=[];
-      
-      answers.get().then(e => {
-        e.forEach(q => {
-          t.push(q.data())
-          console.log("hi")
-          this.setState({questions: q.data()})
-        })
-      })
-  }
+      .collection('questions');
+    let t = [];
+
+    answers.get().then((e) => {
+      e.forEach((q) => {
+        t.push(q.data());
+        console.log('hi');
+        this.setState({ questions: q.data() });
+      });
+    });
+  };
 
   getQuestions1 = () => {
     const answers = firebase.db
       .collection('questions')
       .doc('eFnyPXNGZNnwea6UAb2H')
-      .collection('questionProperties')
-      
-      
-      answers.onSnapshot(e => {
-        e.forEach(q => {
-          console.log(q.data().questionNumber)
-        })
-      })
-  }
+      .collection('questionProperties');
+
+    answers.onSnapshot((e) => {
+      e.forEach((q) => {
+        console.log(q.data().questionNumber);
+      });
+    });
+  };
 
   fileUploadHandler = () => {
-    
     const answers = firebase.db
       .collection('questions')
       .doc('eFnyPXNGZNnwea6UAb2H')
       .collection('answers');
 
-    answers
-      .onSnapshot(doc => {
+    answers.onSnapshot((doc) => {
       // .then((querySnapshot) => {
-        doc.forEach((answers) => {
+      doc.forEach((answers) => {
         let temp = answers.id;
-        console.log(temp)
+        console.log(temp);
         // console.log(temp)
         let temp2 = this.state.answers;
-         let temp3 = answers.data()
+        let temp3 = answers.data();
         // console.log(temp3)
-        temp2[answers.id] = {...temp3}
+        temp2[answers.id] = { ...temp3 };
 
-        this.setState({answers: temp2, isSet: true, users: this.state.users.includes(temp) ? this.state.users : this.state.users.concat(temp)});
-        
+        this.setState({
+          answers: temp2,
+          isSet: true,
+          users: this.state.users.includes(temp)
+            ? this.state.users
+            : this.state.users.concat(temp),
+        });
+      });
+    });
 
-        })
-  })
-
-      // .catch(function (error) {
-      //   console.error('Error adding document: ', error);
-      // });
-}
+    // .catch(function (error) {
+    //   console.error('Error adding document: ', error);
+    // });
+  };
 
   logState = () => {
     console.error(this.state.questions);
   };
 
   render() {
+    let testy;
 
-    let testy
-
-    if(this.state.isSet){
-      testy = this.state.users.map(user => (
+    if (this.state.isSet) {
+      testy = this.state.users.map((user) => (
         <A user={user} answers={this.state.answers[user].answers}></A>
-      ))
-      
+      ));
     }
 
     return (
@@ -119,8 +120,8 @@ class Testing extends Component {
         <p onClick={this.getQuestions}>get questions</p>
         <p onClick={this.logState}>hi</p>
         <p onClick={this.addToAnswers}>hi</p>
-         {/* onClick={() => this.change("gary" , {0:2})}>hi</p> */}
-         {[testy]}
+        {/* onClick={() => this.change("gary" , {0:2})}>hi</p> */}
+        {[testy]}
       </div>
     );
   }

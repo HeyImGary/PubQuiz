@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import _ from 'lodash';
 
 import axios from '../../axios-add-questions';
 
@@ -16,7 +17,6 @@ import firebase from '../../firestore';
 
 class CreateGame extends Component {
   state = {
-
     questionNumber: 0,
     questions: [],
     questionProps: [
@@ -68,34 +68,33 @@ class CreateGame extends Component {
     });
   };
 
-
   uploadQuizHandler = () => {
+    let id = _.uniqueId('aa');
     const post = {
       questions: this.state.questions,
     };
 
-    const questions = firebase.db
-      // .collection('questions')
-      // .doc()
-      // .collection('questions')
-      // .add({ ...this.state.questions })
-      // .then(function (docRef) {
-      //   console.log('Document written with ID: ', docRef.id);
-      // })
-      // .catch(function (error) {
-      //   console.error('Error adding document: ', error);
-      // });
+    const questions = firebase.db.collection('questions').doc(id);
+
+    questions
       .collection('questions')
-      .doc('eFnyPXNGZNnwea6UAb2H')
-      .collection('answers')
-      .doc('Gary')
-      .update({ 2: 'test2' })
+      .add({ ...this.state.questions })
       .then(function (docRef) {
-        console.log('Document written with ID: ');
-      })
-      .catch(function (error) {
-        console.error('Error adding document: ', error);
+        console.log('Document written with ID: ', docRef.id);
       });
+
+    questions.collection('questionProperties').add({ questionNumber: 0 });
+
+    // .doc('eFnyPXNGZNnwea6UAb2H')
+    // .collection('answers')
+    // .doc('Gary')
+    // .update({ 2: 'test2' })
+    // .then(function (docRef) {
+    //   console.log('Document written with ID: ');
+    // })
+    // .catch(function (error) {
+    //   console.error('Error adding document: ', error);
+    // });
     // axios
     //   .post('/questions.json', post)
     //   .then((responce) => this.setState({ roomId: responce.data.name }))
