@@ -14,7 +14,8 @@ class Testing extends Component {
     image: '',
     answers:[],
     users:[],
-    test: [],
+    questions: [],
+    test: ["test", "50", "13", "45"],
     isSet: false,
   };
 
@@ -27,6 +28,45 @@ class Testing extends Component {
 
     //this.setState({ file: e.target.files[0] });
   };
+
+  addToAnswers = () => {
+    const answers = firebase.db
+      .collection('questions')
+      .doc('eFnyPXNGZNnwea6UAb2H')
+      .collection('answers')
+      .doc("Richard")
+      .update({answers:this.state.test})
+  }
+
+  getQuestions = () => {
+    const answers = firebase.db
+      .collection('questions')
+      .doc('eFnyPXNGZNnwea6UAb2H')
+      .collection('questions')
+      let t=[];
+      
+      answers.get().then(e => {
+        e.forEach(q => {
+          t.push(q.data())
+          console.log("hi")
+          this.setState({questions: q.data()})
+        })
+      })
+  }
+
+  getQuestions1 = () => {
+    const answers = firebase.db
+      .collection('questions')
+      .doc('eFnyPXNGZNnwea6UAb2H')
+      .collection('questionProperties')
+      
+      
+      answers.onSnapshot(e => {
+        e.forEach(q => {
+          console.log(q.data().questionNumber)
+        })
+      })
+  }
 
   fileUploadHandler = () => {
     
@@ -59,7 +99,7 @@ class Testing extends Component {
 }
 
   logState = () => {
-    console.error(this.state);
+    console.error(this.state.questions);
   };
 
   render() {
@@ -76,7 +116,9 @@ class Testing extends Component {
     return (
       <div>
         <p onClick={() => this.fileUploadHandler()}>hi</p>
+        <p onClick={this.getQuestions}>get questions</p>
         <p onClick={this.logState}>hi</p>
+        <p onClick={this.addToAnswers}>hi</p>
          {/* onClick={() => this.change("gary" , {0:2})}>hi</p> */}
          {[testy]}
       </div>

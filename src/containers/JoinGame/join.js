@@ -9,20 +9,23 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 
 const initialValues = {
   roomId: '',
+  userName: ''
 };
 
 const validationSchema = Yup.object({
-  roomId: Yup.string().min(2, 'nope').required('Please enter a room id'),
+  roomId: Yup.string().required('Please enter a room id'),
+  userName: Yup.string().required('Please enter a room username')
 });
 
 const Join = (props) => {
   const formik = useFormik({
     initialValues: {
-      initialValues,
+      ...initialValues,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      props.joinHandler(values.roomId);
+      console.log(values.userName)
+      props.joinHandler(values.roomId, values.userName);
     },
 
     isInitialValid: validationSchema.isValidSync(initialValues),
@@ -35,6 +38,7 @@ const Join = (props) => {
           <h1>Enter Room ID </h1>
         </Col>
       </Row>
+      {JSON.stringify(formik, null ,0 )}
       <Row className={styles.CenterContent}>
         <Col xs={12} md={3}>
           <Form onSubmit={formik.handleSubmit}>
@@ -50,6 +54,17 @@ const Join = (props) => {
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.roomId}
+            />
+            <p>UserName</p>
+            <Form.Control
+              id="userName"
+              name="userName"
+              type="text"
+              isValid={formik.isValid && formik.touched.userName}
+              isInvalid={!formik.isValid && formik.touched.userName}
+              onBlur={formik.handleBlur}
+              onChange={formik.handleChange}
+              value={formik.values.userName}
             />
 
             <br />

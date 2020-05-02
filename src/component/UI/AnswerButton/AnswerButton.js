@@ -5,12 +5,11 @@ let style = styles.NavButton;
 
 const AnswerButton = (props) => {
   const clicked = () => {
-    style = styles.Selected;
-    console.log('what?', style);
+    //style = styles.Selected;
   };
 
   return (
-    <div onClick={() => clicked()} tabIndex="1" className={styles.NavButton}>
+    <div disabled={props.disabled} onClick={() => props.clicked()} tabIndex="1" className={props.disabled ? styles.Disabled : styles.NavButton}>
       <h2>{props.children}</h2>
     </div>
   );
