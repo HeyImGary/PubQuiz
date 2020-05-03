@@ -5,15 +5,25 @@
   margin-top: 1vh;
 }
 
+.Hidden {
+  display: none;
+}
+
 .Padding {
   margin-top: 1vh;
 }
 
-.ImageHeight {
-  height: 20vh;
+.Red {
+  color: red;
 }
 
+.Green {
+  color: green;
+}
 
+.ImageHeight {
+  height: 5vh;
+}
 
 .BackBar {
   justify-content: left;

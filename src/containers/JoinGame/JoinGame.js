@@ -12,7 +12,7 @@ import Aux from '../../hoc/Aux';
 import axios from '../../axios-add-questions';
 import { Col } from 'react-bootstrap';
 
-import firebase from '../../firestore'
+import firebase from '../../firestore';
 
 class JoinGame extends Component {
   state = {
@@ -20,10 +20,9 @@ class JoinGame extends Component {
     roomId: null,
     questionNumber: 0,
     isFetching: false,
-    isCorrect: null,
     answers: [],
     disabled: false,
-    userName: null
+    userName: null,
   };
 
   roomIdHandler = (e) => {
@@ -37,73 +36,77 @@ class JoinGame extends Component {
     const questionNumber = firebase.db
       .collection('questions')
       .doc('eFnyPXNGZNnwea6UAb2H')
-      .collection('questionProperties')
-      
-      
-      questionNumber.onSnapshot(e => {
-        e.forEach(q => {
-          this.stateState({questionNumber: q.data().questionNumber})
-        })
-      })
+      .collection('questionProperties');
+
+    questionNumber.onSnapshot((e) => {
+      e.forEach((q) => {
+        this.stateState({ questionNumber: q.data().questionNumber });
+      });
+    });
   };
 
   joinHandler = (id, userName) => {
-    console.log("test", userName)
+    console.log('test', userName);
     this.setState({ isFetching: true });
-    const questions = firebase.db
+    const questions = firebase.db.collection('questions').doc(id);
+
+    questions
       .collection('questions')
-      .doc(id)
-      
-    questions.collection('questions').get().then(e => {
-        e.forEach(q => {
-          
-          console.log("hi")
+      .get()
+      .then((e) => {
+        e.forEach((q) => {
+          console.log('hi');
           this.setState({
             questions: q.data(),
             isFetching: false,
-            roomId:id,
-            userName: userName
-          })
-        })
-    })
+            roomId: id,
+            userName: userName,
+          });
+        });
+      });
 
-      questions.collection('questionProperties').onSnapshot(e => {
-        e.forEach(q => {
-          this.setState({questionNumber: q.data().questionNumber, disabled: false})
-        })
-      })
+    questions.collection('questionProperties').onSnapshot((e) => {
+      e.forEach((q) => {
+        this.setState({
+          questionNumber: q.data().questionNumber,
+          disabled: false,
+        });
+      });
+    });
   };
 
   sendAnswer = () => {
-    console.log(this.state.userName)
+    console.log(this.state.userName);
     const questions = firebase.db
       .collection('questions')
       .doc(this.state.roomId)
-      .collection("answers")
-      .doc(this.state.userName)
+      .collection('answers')
+      .doc(this.state.userName);
 
-      this.state.questionNumber === 0 ? questions.set({answers: this.state.answers}) : questions.update({answers: this.state.answers})
-  }
+    this.state.questionNumber === 0
+      ? questions.set({ answers: this.state.answers })
+      : questions.update({ answers: this.state.answers });
+  };
 
-  addAnswer = (answer) =>{
-    this.setState({
-      disabled: true,
-      answers:[...this.state.answers, answer]
-    }, () => {
-    this.sendAnswer()
-    })
-  }
+  addAnswer = (answer) => {
+    this.setState(
+      {
+        disabled: true,
+        answers: [...this.state.answers, answer],
+      },
+      () => {
+        this.sendAnswer();
+      }
+    );
+  };
 
   logState = () => {
-    console.log(this.state)
-  }
+    console.log(this.state);
+  };
 
   render() {
     let questions = (
-      <Join
-        joinHandler={this.joinHandler}
-        roomIdHandler={this.roomIdHandler}
-      />
+      <Join joinHandler={this.joinHandler} roomIdHandler={this.roomIdHandler} />
     );
 
     if (this.state.questions.length !== 0) {

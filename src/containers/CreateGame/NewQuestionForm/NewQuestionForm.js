@@ -1,26 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 
-import Aux from '../../hoc/Aux';
+import { isSet } from 'lodash';
 
-import styles from './CreateGame.module.css';
+import Aux from '../../../hoc/Aux';
+
+import {
+  faImage,
+  faFont,
+  faThLarge,
+  faQuoteLeft,
+} from '@fortawesome/free-solid-svg-icons';
+import FormButton from '../../../component/FormButton/FormButton';
+
+import styles from './NewQuestionForm.module.css';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 
-const Test = (props) => {
-  const isMultiQuestion = false;
+const NewQuestionForm = (props) => {
+  const [questionType, updateQuestionType] = useState('text');
+  const [answerType, updateAnswerType] = useState('multi');
+  const [questionNumber, updateQuestionNumber] = useState(0);
+  const [image, updateImage] = useState('');
   let question = [];
 
   const initialValues = {
-    question: '',
+    question: isSet(props.question) ? props.question.question : '',
     answers: {
-      answerOne: '',
-      answerTwo: '',
-      answerThree: '',
-      answerFour: '',
+      answerOne: isSet(props.question) ? props.question.answerOne : '',
+      answerTwo: isSet(props.question) ? props.question.answerTwo : '',
+      answerThree: isSet(props.question) ? props.question.answerThree : '',
+      answerFour: isSet(props.question) ? props.question.answeFour : '',
     },
-    correctAnswer: 'answerOne',
+  };
+
+  const uploadImageHandler = (e) => {
+    const files = e.target.files;
+    const file = files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      updateImage(reader.result);
+    };
   };
 
   const validationSchema = Yup.object(
@@ -52,32 +75,44 @@ const Test = (props) => {
 
     onSubmit: (values) => {
       question = [
-        ...question,
         {
           question: values.question,
-          answers:
-            props.questionProps.answerType === 'multi'
-              ? { ...values.answers }
-              : null,
-          questionType: props.questionProps.questionType,
-          answerType: props.questionProps.answerType,
-          id: props.questionNumber,
-          image: props.image === '' ? null : props.image,
-          correctAnswer: values.correctAnswer,
+          answers: answerType === 'multi' ? { ...values.answers } : null,
+          questionType: questionType,
+          answerType: answerType,
+          id: questionNumber,
+          image: image === '' ? null : image,
         },
-        formik.resetForm(formik)
+        updateQuestionNumber(questionNumber + 1),
+        formik.resetForm(formik),
       ];
 
       props.addQuestionHandler({ ...question[0] });
-
-      console.log(question);
-      formik.resetForm({ values: {...initialValues} });
+      formik.resetForm({ values: { ...initialValues } });
     },
   });
 
   return (
     <Form onSubmit={formik.handleSubmit} className={styles.CenterContent}>
       {/* {JSON.stringify(formik, null, 2)} */}
+      <Row className={styles.CenterContent}>
+        <Col xs={12} md={2}>
+          <FormButton
+            faImage={faFont}
+            clicked={() => updateQuestionType('text')}
+          >
+            Text
+          </FormButton>
+        </Col>
+        <Col xs={12} md={2}>
+          <FormButton
+            faImage={faImage}
+            clicked={() => updateQuestionType('img')}
+          >
+            Image
+          </FormButton>
+        </Col>
+      </Row>
 
       <Row>
         <Col xs={12} md={12}>
@@ -93,7 +128,7 @@ const Test = (props) => {
         </Col>
       </Row>
 
-      {props.questionProps.questionType === 'img' && props.image === '' ? (
+      {questionType === 'img' ? (
         <Row className={styles.CenterContent}>
           <Col xs={12} md={3}>
             <Form.File
@@ -101,17 +136,37 @@ const Test = (props) => {
               name="image"
               value={formik.values.image}
               onBlur={formik.handleBlur}
-              onChange={props.uploadImageHandler}
+              onChange={(e) => uploadImageHandler(e)}
             />
           </Col>
         </Row>
       ) : null}
-      {props.image !== '' ? (
+      {image !== '' ? (
         <Row className={styles.CenterContent}>
-          <img src={props.image} className={styles.ImageHeight} />
+          <img src={image} className={styles.ImageHeight} />
         </Row>
       ) : null}
-      {props.questionProps.answerType === 'multi' ? (
+
+      <Row className={styles.CenterContent}>
+        <Col xs={12} md={2}>
+          <FormButton
+            faImage={faThLarge}
+            clicked={() => updateAnswerType('multi')}
+          >
+            Multiple Choice
+          </FormButton>
+        </Col>
+        <Col xs={12} md={2}>
+          <FormButton
+            faImage={faQuoteLeft}
+            clicked={() => updateAnswerType('text')}
+          >
+            Open Ended
+          </FormButton>
+        </Col>
+      </Row>
+
+      {answerType === 'multi' ? (
         <Aux>
           <Row className={styles.Padding}>
             <Col xs={12} md={6}>
@@ -160,31 +215,13 @@ const Test = (props) => {
               />
             </Col>
           </Row>
-
-          {/* <Row className={styles.Padding}>
-            <Col xs={12} md={12}>
-              <p>Correct Answer:</p>
-              <Form.Control
-                as="select"
-                name="correctAnswer"
-                value={formik.values.correctAnswer}
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-              >
-                <option value="answerOne">1</option>
-                <option value="answerTwo">2</option>
-                <option value="answerThree">3</option>
-                <option value="answerFour">4</option>
-              </Form.Control>
-            </Col>
-          </Row> */}
         </Aux>
       ) : null}
 
       <hr />
-      <Button type="submit">Save Question</Button>
+      <Button type="submit">Add Question</Button>
     </Form>
   );
 };
 
-export default Test;
+export default NewQuestionForm;

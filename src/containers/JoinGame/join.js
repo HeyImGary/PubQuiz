@@ -9,12 +9,12 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 
 const initialValues = {
   roomId: '',
-  userName: ''
+  userName: '',
 };
 
 const validationSchema = Yup.object({
   roomId: Yup.string().required('Please enter a room id'),
-  userName: Yup.string().required('Please enter a room username')
+  userName: Yup.string().required('Please enter a room username'),
 });
 
 const Join = (props) => {
@@ -24,7 +24,7 @@ const Join = (props) => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values.userName)
+      console.log(values.userName);
       props.joinHandler(values.roomId, values.userName);
     },
 
@@ -38,7 +38,7 @@ const Join = (props) => {
           <h1>Enter Room ID </h1>
         </Col>
       </Row>
-      {JSON.stringify(formik, null ,0 )}
+      {/* {JSON.stringify(formik, null ,0 )} */}
       <Row className={styles.CenterContent}>
         <Col xs={12} md={3}>
           <Form onSubmit={formik.handleSubmit}>
