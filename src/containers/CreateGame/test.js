@@ -65,12 +65,13 @@ const Test = (props) => {
           image: props.image === '' ? null : props.image,
           correctAnswer: values.correctAnswer,
         },
+        formik.resetForm(formik)
       ];
 
       props.addQuestionHandler({ ...question[0] });
 
       console.log(question);
-      formik.resetForm({ values: {} });
+      formik.resetForm({ values: {...initialValues} });
     },
   });
 
@@ -160,7 +161,7 @@ const Test = (props) => {
             </Col>
           </Row>
 
-          <Row className={styles.Padding}>
+          {/* <Row className={styles.Padding}>
             <Col xs={12} md={12}>
               <p>Correct Answer:</p>
               <Form.Control
@@ -176,7 +177,7 @@ const Test = (props) => {
                 <option value="answerFour">4</option>
               </Form.Control>
             </Col>
-          </Row>
+          </Row> */}
         </Aux>
       ) : null}
 

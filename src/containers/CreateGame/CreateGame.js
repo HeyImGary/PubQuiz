@@ -21,29 +21,22 @@ class CreateGame extends Component {
     questions: [],
     questionProps: [
       {
-        questionType: null,
-        answerType: null,
+        questionType: "text",
+        answerType: "multi",
       },
     ],
     isMultiQuestion: null,
-    show: false,
+    show: true,
     edit: true,
     questionType: null,
     files: '',
   };
 
   uploadImageHandler(e) {
-    // get the files
     const files = e.target.files;
-    // Process each file
 
     const file = files[0];
-    // Make new FileReader
-
     const reader = new FileReader();
-    // Convert the file to base64 text
-
-    // on reader load somthing...
     reader.readAsDataURL(file);
 
     reader.onload = () => {
@@ -62,7 +55,7 @@ class CreateGame extends Component {
     const newQuestionState = [...this.state.questions, newQuestion];
     this.setState({
       questions: newQuestionState,
-      show: false,
+      
       files: '',
       questionNumber: this.state.questionNumber + 1,
     });
@@ -70,9 +63,6 @@ class CreateGame extends Component {
 
   uploadQuizHandler = () => {
     let id = _.uniqueId('aa');
-    const post = {
-      questions: this.state.questions,
-    };
 
     const questions = firebase.db.collection('questions').doc(id);
 
@@ -85,20 +75,6 @@ class CreateGame extends Component {
 
     questions.collection('questionProperties').add({ questionNumber: 0 });
 
-    // .doc('eFnyPXNGZNnwea6UAb2H')
-    // .collection('answers')
-    // .doc('Gary')
-    // .update({ 2: 'test2' })
-    // .then(function (docRef) {
-    //   console.log('Document written with ID: ');
-    // })
-    // .catch(function (error) {
-    //   console.error('Error adding document: ', error);
-    // });
-    // axios
-    //   .post('/questions.json', post)
-    //   .then((responce) => this.setState({ roomId: responce.data.name }))
-    //   .catch((error) => console.log(error));
   };
 
   questionPropsHandler = (prop, value) => {
@@ -131,6 +107,7 @@ class CreateGame extends Component {
             questionType={this.state.questionType}
             addQuestionHandler={(i) => this.AddQuestion(i)}
             questionNumber={this.state.questionNumber}
+            questionPropsHandler={this.questionPropsHandler}
             questionProps={this.state.questionProps[0]}
             uploadQuizHandler={this.uploadQuizHandler}
           />
@@ -140,61 +117,74 @@ class CreateGame extends Component {
 
     return (
       <Aux>
-        <Col xs={12} md={{ span: 2, offset: 2 }} className={styles.BackBar}>
+        {/* <Col xs={12} md={{ span: 2, offset: 2 }} className={styles.BackBar}>
           <Link to="/">
             <h4>Back</h4>
           </Link>
-        </Col>
-
-        <h1>Add Question</h1>
-
-        <QuestionList
-          questions={this.state.questions}
-          deleteQuestionHandler={(questionIndex) =>
-            this.deleteQuestion(questionIndex)
-          }
-        />
-
-        {/* <input type="file" onChange={(e) => this.uploadImageHandler(e)} />
-        <img src={this.state.files} /> */}
-
-        <Button
-          onClick={() => this.questionPropsHandler('questionType', 'img')}
-        >
-          Image
-        </Button>
-
-        <Button
-          onClick={() => this.questionPropsHandler('questionType', 'text')}
-        >
-          text
-        </Button>
-        <br />
-
+        </Col> */}
+        <Row>
+          <Col xs={12} md={3} className={styles.Overflow}>
+            <h1>Question List</h1>
+            <hr/>
+            <QuestionList
+              questions={this.state.questions}
+              deleteQuestionHandler={(questionIndex) =>
+                this.deleteQuestion(questionIndex)
+              }
+              />
+          </Col>
+          <Col xs={12} md={1}>
+            <div className={styles.Vl}></div>
+          </Col>
+          <Col xs={12} md={7}>
+            <h1>Add Question</h1>
+            <Row className={styles.CenterContent}>
+                <Col xs={12} md={2}>
+                  <Button
+                    onClick={() => this.questionPropsHandler('questionType', 'img')}
+                  >
+                    Image
+                  </Button>
+              </Col>
+              <Col xs={12} md={2}>
+                <Button
+                  onClick={() => this.questionPropsHandler('questionType', 'text')}
+                >
+                  text
+                </Button>
+              </Col>
+            </Row>
+            <br />
+            <Row className={styles.CenterContent}>
+        <Col xs={12} md={2}>
         <Button
           onClick={() => this.questionPropsHandler('answerType', 'multi')}
         >
-          Multiple Choice Question
+          Multiple Choice
         </Button>
-
+        </Col>
+        <Col xs={12} md={2}>
         <Button onClick={() => this.questionPropsHandler('answerType', 'text')}>
           Text Question
         </Button>
+        </Col>
+        </Row>
 
-        <br />
-        <Button onClick={() => this.logState()}>log console</Button>
+            {this.state.show ? [questionForm] : null}
 
-        {/* <Button onClick={() => this.logState()}>console</Button> */}
+            <br />
 
-        {this.state.show ? [questionForm] : null}
+            {this.state.questions.length > 0 ? (
+              <Button variant="success" onClick={() => this.uploadQuizHandler()}>
+                Submit Questions
+              </Button>
+            ) : null}
+         
+          </Col>
+        </Row>
 
-        <br />
-
-        {this.state.questions.length > 0 ? (
-          <Button variant="success" onClick={() => this.uploadQuizHandler()}>
-            Submit Questions
-          </Button>
-        ) : null}
+       
+        
       </Aux>
     );
   }

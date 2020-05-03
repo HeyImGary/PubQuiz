@@ -105,6 +105,40 @@ class Testing extends Component {
     console.error(this.state.questions);
   };
 
+  fileUploadHandler = () => {
+    
+    const answers = firebase.db
+      .collection('questions')
+      .doc('eFnyPXNGZNnwea6UAb2H')
+      .collection('answers');
+
+    answers
+      .onSnapshot(doc => {
+      // .then((querySnapshot) => {
+        doc.forEach((answers) => {
+        let temp = answers.id;
+        console.log(temp)
+        // console.log(temp)
+        let temp2 = this.state.answers;
+         let temp3 = answers.data()
+        // console.log(temp3)
+        temp2[answers.id] = {...temp3}
+
+        this.setState({answers: temp2, isSet: true, users: this.state.users.includes(temp) ? this.state.users : this.state.users.concat(temp)});
+        
+
+        })
+  })
+
+      // .catch(function (error) {
+      //   console.error('Error adding document: ', error);
+      // });
+}
+
+  logState = () => {
+    console.error(this.state.questions);
+  };
+
   render() {
     let testy;
 

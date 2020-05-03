@@ -1,41 +1,47 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import styles from './QuestionList.module.css';
 
 import Aux from '../../../hoc/Aux.js';
 import { Button, Row, Col } from 'react-bootstrap';
 
-const questionList = (props) =>
+const QuestionList = (props) => {
+
+const [show, changeShow] = useState(true)
+
+return(
   props.questions.map((question, index) => (
     <Aux>
       <Row className={styles.CenterContents}>
         <Col xs={12} md={12}>
           <h4>
-            Question {index + 1}: {question.question}
+            Question {index + 1}
           </h4>
+          <button onClick={() => changeShow(!show)}>Hide</button>
+          <p>{question.question}</p>
         </Col>
         {question.questionType === 'img' ? (
           <Col xs={12} md={12} className={styles.CenterContents}>
             <img src={question.image} className={styles.ImageHeight} />
           </Col>
         ) : null}
-
-        {question.answerType === 'multi' ? (
+        {show ? (
+        question.answerType === 'multi' ? (
           <Aux>
             <Col xs={12} md={6}>
-              <p>Answer 1:{question.answers.answerOne}</p>
+              <p>A1:{question.answers.answerOne}</p>
             </Col>
             <Col xs={12} md={6}>
-              <p>Answer 2:{question.answers.answerTwo}</p>
+              <p>A2:{question.answers.answerTwo}</p>
             </Col>
             <Col xs={12} md={6}>
-              <p>Answer 2:{question.answers.answerThree}</p>
+              <p>A3:{question.answers.answerThree}</p>
             </Col>
             <Col xs={12} md={6}>
-              <p>Answer 2:{question.answers.answerFour}</p>
+              <p>A4:{question.answers.answerFour}</p>
             </Col>
           </Aux>
-        ) : null}
+        ) : null): null}
         <Col xs={12} md={12}>
           <Button
             variant="danger"
@@ -50,6 +56,7 @@ const questionList = (props) =>
         </Col>
       </Row>
     </Aux>
-  ));
-
-export default questionList;
+  ))
+  )
+}
+export default QuestionList;

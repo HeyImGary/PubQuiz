@@ -16,7 +16,7 @@ import styles from './Home.module.css'
 class Home extends Component {
   render() {
     return (
-      <Container className={styles.CenterContent}>
+      <Container className={styles.CenterContent} fluid>
         <Switch>
           <Route exact path="/" component={HomeScreen} />
 

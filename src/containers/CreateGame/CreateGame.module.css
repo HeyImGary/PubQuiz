@@ -9,11 +9,23 @@
   margin-top: 1vh;
 }
 
+.Overflow {
+  overflow-y: auto;
+  height: 100vh;
+}
+
 .BackBar {
   justify-content: left;
   text-align: left;
   align-items: left;
   position: absolute;
+}
+@media only screen and (min-width: 600px) {
+.Vl {
+  border-left: 1px solid rgba(43, 43, 43, 0.945);
+  margin-top:-1vh;
+  height: 100vh;
+}
 }
 
 .ImageHeight {
