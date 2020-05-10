@@ -3,18 +3,16 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import Aux from '../../hoc/Aux';
-import styles from './JoinGame.module.css';
+import styles from './Play.module.css';
 
 import { Form, Button, Row, Col } from 'react-bootstrap';
 
 const initialValues = {
   roomId: '',
-  userName: '',
 };
 
 const validationSchema = Yup.object({
   roomId: Yup.string().required('Please enter a room id'),
-  userName: Yup.string().required('Please enter a room username'),
 });
 
 const Join = (props) => {
@@ -24,8 +22,12 @@ const Join = (props) => {
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values.userName);
-      props.joinHandler(values.roomId, values.userName);
+      // props.joinHandler(values.roomId);
+      console.log(props);
+      props.history.push({
+        pathname: '/play',
+        search: 'roomId=' + values.roomId,
+      });
     },
 
     isInitialValid: validationSchema.isValidSync(initialValues),
@@ -38,9 +40,8 @@ const Join = (props) => {
           <h1>Enter Room ID </h1>
         </Col>
       </Row>
-      {/* {JSON.stringify(formik, null ,0 )} */}
       <Row className={styles.CenterContent}>
-        <Col xs={12} md={3}>
+        <Col xs={12} md={6}>
           <Form onSubmit={formik.handleSubmit}>
             {!formik.isValid && formik.touched.roomId ? (
               <p>{formik.errors.roomId}</p>
@@ -54,17 +55,6 @@ const Join = (props) => {
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
               value={formik.values.roomId}
-            />
-            <p>UserName</p>
-            <Form.Control
-              id="userName"
-              name="userName"
-              type="text"
-              isValid={formik.isValid && formik.touched.userName}
-              isInvalid={!formik.isValid && formik.touched.userName}
-              onBlur={formik.handleBlur}
-              onChange={formik.handleChange}
-              value={formik.values.userName}
             />
 
             <br />

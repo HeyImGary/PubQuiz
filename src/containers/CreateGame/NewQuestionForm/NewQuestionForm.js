@@ -33,6 +33,7 @@ const NewQuestionForm = (props) => {
       answerThree: isSet(props.question) ? props.question.answerThree : '',
       answerFour: isSet(props.question) ? props.question.answeFour : '',
     },
+    image: '',
   };
 
   const uploadImageHandler = (e) => {
@@ -86,7 +87,7 @@ const NewQuestionForm = (props) => {
         updateQuestionNumber(questionNumber + 1),
         formik.resetForm(formik),
       ];
-
+      updateImage('');
       props.addQuestionHandler({ ...question[0] });
       formik.resetForm({ values: { ...initialValues } });
     },
@@ -96,7 +97,7 @@ const NewQuestionForm = (props) => {
     <Form onSubmit={formik.handleSubmit} className={styles.CenterContent}>
       {/* {JSON.stringify(formik, null, 2)} */}
       <Row className={styles.CenterContent}>
-        <Col xs={12} md={2}>
+        <Col xs={6} md={3}>
           <FormButton
             faImage={faFont}
             clicked={() => updateQuestionType('text')}
@@ -104,7 +105,7 @@ const NewQuestionForm = (props) => {
             Text
           </FormButton>
         </Col>
-        <Col xs={12} md={2}>
+        <Col xs={6} md={3}>
           <FormButton
             faImage={faImage}
             clicked={() => updateQuestionType('img')}
@@ -148,7 +149,7 @@ const NewQuestionForm = (props) => {
       ) : null}
 
       <Row className={styles.CenterContent}>
-        <Col xs={12} md={2}>
+        <Col xs={6} md={3}>
           <FormButton
             faImage={faThLarge}
             clicked={() => updateAnswerType('multi')}
@@ -156,7 +157,7 @@ const NewQuestionForm = (props) => {
             Multiple Choice
           </FormButton>
         </Col>
-        <Col xs={12} md={2}>
+        <Col xs={6} md={3}>
           <FormButton
             faImage={faQuoteLeft}
             clicked={() => updateAnswerType('text')}
@@ -169,7 +170,7 @@ const NewQuestionForm = (props) => {
       {answerType === 'multi' ? (
         <Aux>
           <Row className={styles.Padding}>
-            <Col xs={12} md={6}>
+            <Col xs={12} md={6} className={styles.Padding}>
               <Form.Control
                 type="text"
                 placeholder="Answer 1"
@@ -180,7 +181,7 @@ const NewQuestionForm = (props) => {
               />
             </Col>
 
-            <Col xs={12} md={6}>
+            <Col xs={12} md={6} className={styles.Padding}>
               <Form.Control
                 type="text"
                 placeholder="Answer 2"
@@ -192,8 +193,8 @@ const NewQuestionForm = (props) => {
             </Col>
           </Row>
 
-          <Row className={styles.Padding}>
-            <Col xs={12} md={6}>
+          <Row>
+            <Col xs={12} md={6} className={styles.Padding}>
               <Form.Control
                 type="text"
                 placeholder="Answer 3"
@@ -204,7 +205,7 @@ const NewQuestionForm = (props) => {
               />
             </Col>
 
-            <Col xs={12} md={6}>
+            <Col xs={12} md={6} className={styles.Padding}>
               <Form.Control
                 type="text"
                 placeholder="Answer 4"

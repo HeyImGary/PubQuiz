@@ -16,7 +16,7 @@ const homeScreen = () => (
     </Row>
     <Row className={styles.CenterContent}>
       <Col xs={12} md={3}>
-        <Link to="/play">
+        <Link to="/join">
           <NavButton>Play Game</NavButton>
         </Link>
       </Col>

@@ -19,7 +19,7 @@ const QuestionList = (props) => {
         <Col xs={12} md={12}>
           <h4 onClick={() => toggleShow(!show)}>
             {props.questionNumber + 1}: {props.question.question}
-            {show ? '▾' : '▸'}
+            {show ? ' ▾' : ' ▸'}
           </h4>
         </Col>
       </Row>
@@ -32,18 +32,13 @@ const QuestionList = (props) => {
         {show ? (
           props.question.answerType === 'multi' ? (
             <Aux>
-              <Col xs={12} md={6}>
-                <p>A1:{props.question.answers.answerOne}</p>
-              </Col>
-              <Col xs={12} md={6}>
-                <p>A2:{props.question.answers.answerTwo}</p>
-              </Col>
-              <Col xs={12} md={6}>
-                <p>A3:{props.question.answers.answerThree}</p>
-              </Col>
-              <Col xs={12} md={6}>
-                <p>A4:{props.question.answers.answerFour}</p>
-              </Col>
+              {Object.keys(props.question.answers).map((answer, index) => (
+                <Col xs={6} md={6}>
+                  <p>
+                    A{index + 1}: {props.question.answers[answer]}
+                  </p>
+                </Col>
+              ))}
             </Aux>
           ) : null
         ) : null}

@@ -5,5 +5,12 @@
 }
 
 .MainRow {
-  padding-top: 20%;
+  padding-top: 30vh;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+}
+
+.Image {
+  width: 50vh;
 }

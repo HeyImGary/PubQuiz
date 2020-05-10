@@ -54,11 +54,6 @@ class CreateGame extends Component {
   render() {
     return (
       <Aux>
-        {/* <Col xs={12} md={{ span: 2, offset: 2 }} className={styles.BackBar}>
-          <Link to="/">
-            <h4>Back</h4>
-          </Link>
-        </Col> */}
         <Row>
           <Col xs={12} md={3} className={styles.Overflow}>
             <h1>Question List</h1>
@@ -73,6 +68,14 @@ class CreateGame extends Component {
                 }
               />
             ))}
+            {this.state.questions.length > 0 ? (
+              <Button
+                variant="success"
+                onClick={() => this.uploadQuizHandler()}
+              >
+                Submit Questions
+              </Button>
+            ) : null}
           </Col>
           <Col xs={12} md={1}>
             <div className={styles.Vl}></div>
@@ -86,15 +89,6 @@ class CreateGame extends Component {
             />
 
             <br />
-
-            {!isEmpty(this.state.questions.length) ? (
-              <Button
-                variant="success"
-                onClick={() => this.uploadQuizHandler()}
-              >
-                Submit Questions
-              </Button>
-            ) : null}
           </Col>
         </Row>
       </Aux>

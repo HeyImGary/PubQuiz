@@ -3,13 +3,7 @@ import styles from './FormButton.module.css';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-let style = styles.NavButton;
-
 const FormButton = (props) => {
-  const clicked = () => {
-    //style = styles.Selected;
-  };
-
   return (
     <div
       disabled={props.disabled}
